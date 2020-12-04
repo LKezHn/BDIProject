@@ -5,7 +5,12 @@ from tkinter import messagebox
 from ..auth.AuthManager import AuthManager
 
 am = AuthManager()
-
+"""
+    Clase encargada de crear la ventana de autenticación/login de usuarios.
+    @author lemartinezm@unah.hn
+    @version 1.0.0
+    @date 2020/12/01
+"""
 class AuthWindow(tk.Frame):
     def __init__(self, master, parent, user = {}):
         super().__init__(master)
@@ -13,6 +18,13 @@ class AuthWindow(tk.Frame):
         self.master = master
         self.buildWindow(user)
 
+    """
+        Método encargado de cargar los componentes de la venta de autenticación.
+        @param user Es el diccionario que sirve para comunciar la ventana de autenticación con la ventana principal
+            en el que se guardará los valores necesarios para saber si es un usuario autenticado y si es un administrador.
+        @author lemartinezm@unah.hn
+        @version 1.0.0
+    """
     def buildWindow(self, user):
         self.master.geometry('500x170')
         self.master.resizable(width=0, height=0)
@@ -20,7 +32,11 @@ class AuthWindow(tk.Frame):
         self.master.transient(master=self.parent)
         self.master.focus_set()
         
-
+        """
+            Funcion encargada de verificar si los datos introducidos son correctos y si estos pertenecen a un usuario registrado.
+            @author lemartinez,@unah.hn
+            @version 1.0.0
+        """
         def isAuth():
             try:
                 username = usernameInput.get()
@@ -31,9 +47,7 @@ class AuthWindow(tk.Frame):
                 elif not(re.match(r"\w+",username) or re.match(r"[A-Za-z0_9]+", password)):
                     messagebox.showerror("Error","You have used illegal characters", parent=self)
                 else:
-                    pass
-                
-                user["isAuth"], user["isAdmin"] = am.isAuth(username, password)
+                    user["isAuth"], user["isAdmin"] = am.isAuth(username, password)
 
                 if not user['isAuth']:
                     messagebox.showerror("Error","Incorrect password", parent=self)
