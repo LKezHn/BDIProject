@@ -17,6 +17,8 @@ class AuthWindow(tk.Frame):
         self.master.geometry('500x170')
         self.master.resizable(width=0, height=0)
         self.master.title("Auth Window")
+        self.master.transient(master=self.parent)
+        self.master.focus_set()
         
 
         def isAuth():
@@ -48,6 +50,7 @@ class AuthWindow(tk.Frame):
         passwordInput = tk.Entry(self.master, show="*")
         doneButton = tk.Button(self.master, text="Done", command=isAuth)
         usernameLabel.pack()
+        usernameInput.focus()
         usernameInput.pack()
         passwordLabel.pack()
         passwordInput.pack()
