@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import tkinter
 from core.gui.DrawingWindow import DrawingWindow
 
