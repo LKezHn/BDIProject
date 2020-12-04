@@ -7,6 +7,7 @@ import tkinter.filedialog
 from ..auth.AuthManager import AuthManager
 from .DrawManager import *
 from .AuthWindow import AuthWindow
+from .AdminWindow import AdminWindow
 from .PyList import PyList
         
 am = AuthManager()
@@ -27,12 +28,19 @@ class DrawingWindow(tkinter.Frame):
         AuthWindow(self.newWindow, self.master, self.user)
         self.master.wait_window(self.newWindow)
 
+        
+
     def buildWindow(self):
         if(self.user['isAuth'] == "" or self.user['isAuth'] == False):
             quit("Bye")
         self.master.title("Draw")
         bar = tkinter.Menu(self.master)
         fileMenu = tkinter.Menu(bar,tearoff=0)
+
+        def buildAdminWindow():
+            self.newWindow = tkinter.Toplevel(self.master)
+            AdminWindow(self.newWindow,self.master)
+            self.master.wait_window(self.newWindow)
         
         # This code is called by the "New" menu item below when it is selected.
         # The same applies for loadFile, addToFile, and saveFile below. The 
@@ -132,7 +140,8 @@ class DrawingWindow(tkinter.Frame):
         
         if(self.user["isAdmin"] != ""):
             if(self.user['isAdmin']):
-                fileMenu.add_command(label="AdminOptions", command=downloadFile)
+                fileMenu.add_command(label="AdminOptions", command=buildAdminWindow)
+
 
         fileMenu.add_command(label="Exit",command=self.master.quit)
         bar.add_cascade(label="File",menu=fileMenu)
