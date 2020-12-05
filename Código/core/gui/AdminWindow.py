@@ -15,3 +15,4 @@ class AdminWindow(tk.Frame):
         self.master.resizable(width=0, height=0)
         self.master.transient(master=self.parent)
         self.master.focus_set()
+        self.master.grab_set()

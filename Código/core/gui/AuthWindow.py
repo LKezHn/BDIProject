@@ -31,7 +31,8 @@ class AuthWindow(tk.Frame):
         self.master.title("Auth Window")
         self.master.transient(master=self.parent)
         self.master.focus_set()
-        
+        self.master.grab_set()
+
         """
             Funcion encargada de verificar si los datos introducidos son correctos y si estos pertenecen a un usuario registrado.
             @author lemartinez,@unah.hn
@@ -52,7 +53,7 @@ class AuthWindow(tk.Frame):
                 if not user['isAuth']:
                     messagebox.showerror("Error","Incorrect password", parent=self)
                 else:
-                    self.master.destroy()
+                     self.master.destroy()
 
 
             except Exception:
