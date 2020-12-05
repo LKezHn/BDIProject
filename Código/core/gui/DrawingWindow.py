@@ -3,7 +3,7 @@ import turtle
 import tkinter
 import tkinter.colorchooser
 import tkinter.filedialog
-#import xml.dom.minidom
+from ..entities.User import User
 from ..auth.AuthManager import AuthManager
 from .DrawManager import *
 from .AuthWindow import AuthWindow
@@ -23,7 +23,7 @@ class DrawingWindow(tkinter.Frame):
     # This method is called to create all the widgets, place them in the GUI,
     # and define the event handlers for the application.
     def buildAuthWindow(self):
-        self.user = { 'isAuth': "", 'isAdmin': ""}
+        self.user = {'isAuth': "", 'isAdmin': "", "id": 0}
         self.newWindow = tkinter.Toplevel(self.master)
         AuthWindow(self.newWindow, self.master, self.user)
         self.master.wait_window(self.newWindow)
@@ -31,8 +31,10 @@ class DrawingWindow(tkinter.Frame):
         
 
     def buildWindow(self):
-        if(self.user['isAuth'] == "" or self.user['isAuth'] == False):
+        if(self.user['id'] == 0):
             quit("Bye")
+        self.authUser = User()
+        self.authUser.new(self.user['id'])
         self.master.title("Draw")
         bar = tkinter.Menu(self.master)
         fileMenu = tkinter.Menu(bar,tearoff=0)
@@ -134,13 +136,11 @@ class DrawingWindow(tkinter.Frame):
         def downloadFile():
             print("Download file!!!!");
         
-        if(self.user["isAuth"] != ""):
-            if(self.user['isAuth']):
-                fileMenu.add_command(label="Download", command=downloadFile)
+        if(self.authUser.getRole() != 0):
+            fileMenu.add_command(label="Download", command=downloadFile)
         
-        if(self.user["isAdmin"] != ""):
-            if(self.user['isAdmin']):
-                fileMenu.add_command(label="AdminOptions", command=buildAdminWindow)
+        if(self.authUser.getRole() == 1):
+            fileMenu.add_command(label="AdminOptions", command=buildAdminWindow)
 
 
         fileMenu.add_command(label="Exit",command=self.master.quit)

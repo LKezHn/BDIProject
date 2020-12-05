@@ -25,8 +25,8 @@ class AuthWindow(tk.Frame):
         @author lemartinezm@unah.hn
         @version 1.0.0
     """
-    def buildWindow(self, user):
-        self.master.geometry('500x170')
+    def buildWindow(self, user = {}):
+        self.centerWindow()
         self.master.resizable(width=0, height=0)
         self.master.title("Auth Window")
         self.master.transient(master=self.parent)
@@ -48,12 +48,12 @@ class AuthWindow(tk.Frame):
                 elif not(re.match(r"\w+",username) or re.match(r"[A-Za-z0_9]+", password)):
                     messagebox.showerror("Error","You have used illegal characters", parent=self)
                 else:
-                    user["isAuth"], user["isAdmin"] = am.isAuth(username, password)
+                    user["isAuth"], user["isAdmin"], user['id'] = am.isAuth(username, password)
 
-                if not user['isAuth']:
-                    messagebox.showerror("Error","Incorrect password", parent=self)
-                else:
-                     self.master.destroy()
+                    if not user['isAuth']:
+                        messagebox.showerror("Error","Incorrect password", parent=self)
+                    else:
+                        self.master.destroy()
 
 
             except Exception:
@@ -70,3 +70,14 @@ class AuthWindow(tk.Frame):
         passwordLabel.pack()
         passwordInput.pack()
         doneButton.pack();
+    
+    def centerWindow(self):
+        w = 500
+        h = 170
+
+        sw = self.master.winfo_screenwidth()
+        sh = self.master.winfo_screenheight()
+
+        x = (sw - w)/2
+        y = (sh - h)/2
+        self.master.geometry('%dx%d+%d+%d' % (w, h, x, y))

@@ -31,17 +31,22 @@ class AuthManager:
     def isAuth(self, username, password):
         response = engine.call('sp_authUser', [username])
         for value in response:
-            encryptedPassword = list(value.fetchone())[0]
+            user_id, encryptedPassword = list(value.fetchone())
         
         if (username == 'admin' and password == encryptedPassword):
-            return True, True
+            return True, True, user_id
         elif username != 'admin':
             if(encryptedPassword and password == encryptedPassword):
-                return True, False
+                return True, False, user_id
             elif(encryptedPassword and password != encryptedPassword):
-                return False, False
+                return False, False, 0
         else:
-            return False, False
+            return False, False, 0
+
+    def getUserInfo(self, identifier):
+        response = engine.call("sp_getUser",[identifier])
+        for value in response:
+            return list(value.fetchone())
 
     """
         Método encargado de cambiar los colores de lápiz y de relleno del programa.
