@@ -17,9 +17,9 @@ USE Drawings;
 DROP TABLE IF EXISTS Roles;
 
 CREATE TABLE IF NOT EXISTS Roles (
-  idRole CHAR(3) NOT NULL,
+  id INT AUTO_INCREMENT NOT NULL,
   tex_name TEXT NOT NULL,
-  PRIMARY KEY (idRole))
+  PRIMARY KEY (id))
   ;
 
 
@@ -30,11 +30,11 @@ DROP TABLE IF EXISTS User;
 
 CREATE TABLE IF NOT EXISTS User (
   id INT NOT NULL AUTO_INCREMENT,
-  idrole CHAR(3) NOT NULL,
+  id_role INT NOT NULL DEFAULT 2,
   tex_userName TEXT NOT NULL,
   tex_password TEXT NOT NULL,
   PRIMARY KEY (id), 
-  FOREIGN KEY (idrole) REFERENCES Roles (idRole)
+  FOREIGN KEY (id_role) REFERENCES Roles(id)
 );
 
 
@@ -46,11 +46,11 @@ DROP TABLE IF EXISTS Drawing ;
 
 CREATE TABLE IF NOT EXISTS Drawing (
   id INT NOT NULL,
-  iduser INT NOT NULL,
+  id_user INT NOT NULL,
   tex_name VARCHAR(45) NOT NULL,
   blo_drawingData BLOB NOT NULL,
   PRIMARY KEY (id),
-    FOREIGN KEY (iduser) REFERENCES User (id)
+    FOREIGN KEY (id_user) REFERENCES User(id)
 );
 
 
@@ -61,11 +61,11 @@ DROP TABLE IF EXISTS Binnacle;
 
 CREATE TABLE IF NOT EXISTS Binnacle (
   id INT NOT NULL,
-  idUser INT NOT NULL,
+  id_user INT NOT NULL,
   dat_date DATETIME NOT NULL,
   tex_command TEXT NOT NULL,
   PRIMARY KEY (id),
-   FOREIGN KEY (idUser) REFERENCES User (id)
+   FOREIGN KEY (id_user) REFERENCES User(id)
 );
 
 
@@ -100,9 +100,13 @@ DELIMITER $$
   -- -----------------------------------------------------
   DROP PROCEDURE IF EXISTS sp_getUser$$
 
-  CREATE PROCEDURE sp_getUser(IN id_user TEXT, OUT response TEXT)
+  CREATE PROCEDURE sp_getUser(IN id_user TEXT)
   BEGIN
-    SELECT User.id AS "id", User.tex_userName AS "Username", User.idrole AS "Role" FROM User WHERE User.id = id_user INTO response;
+    DECLARE id INT DEFAULT 0;
+    DECLARE user TEXT DEFAULT "";
+    DECLARE user_role INT DEFAULT 0;
+    SELECT User.id, User.tex_userName, User.id_role INTO id, user, user_role FROM User WHERE User.id = id_user;
+    SELECT id, user, user_role;
   END$$
   
   -- -----------------------------------------------------
@@ -113,8 +117,9 @@ DELIMITER $$
   CREATE PROCEDURE sp_authUser(IN username TEXT)
   BEGIN
     DECLARE user_password TEXT DEFAULT "None";
-    SELECT User.tex_password INTO user_password FROM User WHERE User.tex_userName = username;
-    SELECT user_password;
+    DECLARE id_user INT DEFAULT 0;
+    SELECT User.tex_password, User.id INTO user_password, id_user FROM User WHERE User.tex_userName = username;
+    SELECT id_user, user_password;
   END$$
   
   -- -----------------------------------------------------
@@ -124,7 +129,7 @@ DELIMITER $$
 
   CREATE PROCEDURE sp_getOperators()
   BEGIN
-    SELECT User.id, User.tex_userName FROM User JOIN Roles ON User.idrole = Roles.idRole WHERE User.idrole = "OUS";
+    SELECT User.id, User.tex_userName FROM User JOIN Roles ON User.id_role = Roles.id WHERE User.id_role = 2;
   END$$
 
   -- -----------------------------------------------------
@@ -134,7 +139,7 @@ DELIMITER $$
   
   CREATE PROCEDURE sp_addUser(IN new_username TEXT, IN new_password TEXT, IN new_idrole CHAR(3))
   BEGIN
-    INSERT INTO User(idrole, tex_userName, tex_password) VALUES (new_idrole, new_username, new_password);
+    INSERT INTO User(id_role, tex_userName, tex_password) VALUES (new_idrole, new_username, new_password);
   END$$
 
   -- -----------------------------------------------------
@@ -144,7 +149,7 @@ DELIMITER $$
 
   CREATE PROCEDURE sp_updateUserInfo(IN id_user INT, IN new_username TEXT, IN new_password TEXT, IN new_role CHAR(3))
   BEGIN
-    UPDATE User SET tex_userName = new_username, tex_password = new_password, idrole = new_role WHERE User.id = id_user;
+    UPDATE User SET tex_userName = new_username, tex_password = new_password, id_role = new_role WHERE User.id = id_user;
   END$$
   -- -----------------------------------------------------
   -- Delete an user
@@ -179,7 +184,7 @@ DELIMITER $$
       Drawing 
     JOIN 
       User 
-    ON Drawing.iduser = User.id WHERE Drawing.iduser = id_user;
+    ON Drawing.id_user = User.id WHERE Drawing.id_user = id_user;
   END$$
   
   -- -----------------------------------------------------
@@ -199,7 +204,7 @@ DELIMITER $$
   
   CREATE PROCEDURE sp_addDrawing(IN id_user INT, IN drawing_name TEXT, IN drawingData BLOB)
   BEGIN
-    INSERT INTO Drawing(iduser ,tex_name, blo_drawingData) VALUES(id_user, drawing_name, drawingData);
+    INSERT INTO Drawing(id_user ,tex_name, blo_drawingData) VALUES(id_user, drawing_name, drawingData);
   END$$
   
   -- -----------------------------------------------------
@@ -251,9 +256,9 @@ DELIMITER $$
 DELIMITER ;
 -- -----------------------------------------------------
 INSERT INTO DrawingConfig() VALUES ();
-INSERT INTO Roles(idRole, tex_name) VALUES
-	("AUS","Administrador"),
-  ("OUS","Operador");
+INSERT INTO Roles(tex_name) VALUES
+	("Administrador"),
+  ("Operador");
 
-CALL sp_addUser("admin", "admin", "AUS");
-CALL sp_addUser("LKez", "luis", "OUS");
+CALL sp_addUser("admin", "admin", 1);
+CALL sp_addUser("LKez", "luis", 2);
