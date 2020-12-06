@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from ..auth.AuthManager import AuthManager
+from ..modules.auth.AuthManager import AuthManager
 
 class User:
     def __init__(self):

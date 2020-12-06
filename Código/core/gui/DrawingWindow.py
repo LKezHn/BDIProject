@@ -4,7 +4,7 @@ import tkinter
 import tkinter.colorchooser
 import tkinter.filedialog
 from ..entities.User import User
-from ..auth.AuthManager import AuthManager
+from ..modules.auth.AuthManager import AuthManager
 from .DrawManager import *
 from .AuthWindow import AuthWindow
 from .AdminWindow import AdminWindow

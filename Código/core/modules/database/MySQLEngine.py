@@ -7,7 +7,7 @@ class MySQLEngine:
     
     def __init__(self):
         self.getConfig()
-        self.start()
+        
 
     def getConfig(self):
         config = ConfigParser()
@@ -27,7 +27,7 @@ class MySQLEngine:
             database = self.database
         )
 
-        print("Version de texto del objeto de conexion a MYSQL: %s" %self.con)
+        #print("Version de texto del objeto de conexion a MYSQL: %s" %self.con)
 
         #Enlace
         self.link = self.con.cursor()
@@ -54,10 +54,21 @@ class MySQLEngine:
         @param query Es la query a ejecutar
         @version 1.0.0
     """
-    def call(self, nameprocedure,values = []):
-        self.link.callproc(nameprocedure,values)
-        return self.link.stored_results()
-
-    def callUpdateProcedure( self, nameprocedure, values = []):
-        self.link.callproc(nameprocedure,values)
-        self.con.commit()
+    def call(self, nameprocedure, action = 'select' ,values = []):
+        if action == 'select':        
+            self.start()
+            self.link.callproc(nameprocedure,values)
+            results = self.link.stored_results()
+            self.link.close()
+            self.con.close()
+            return results
+        elif action == 'update' or action == 'insert':
+            try:
+                self.start()
+                self.link.callproc(nameprocedure,values)
+                self.con.commit()
+                self.link.close()
+                self.con.close()
+                return True
+            except Exception:
+                return False

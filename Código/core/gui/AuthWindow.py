@@ -2,7 +2,7 @@
 
 import tkinter as tk, re
 from tkinter import messagebox
-from ..auth.AuthManager import AuthManager
+from ..modules.auth.AuthManager import AuthManager
 
 am = AuthManager()
 """

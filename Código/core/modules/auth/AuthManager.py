@@ -29,22 +29,22 @@ class AuthManager:
         @version 1.0.0
     """
     def isAuth(self, username, password):
-        response = engine.call('sp_authUser', [username])
+        response = engine.call('sp_authUser', values = [username])
         for value in response:
             user_id, encryptedPassword = list(value.fetchone())
         
         if (username == 'admin' and password == encryptedPassword):
             return True, True, user_id
         elif username != 'admin':
-            if(encryptedPassword and password == encryptedPassword):
+            if(encryptedPassword and password == em.decrypt(encryptedPassword)):
                 return True, False, user_id
-            elif(encryptedPassword and password != encryptedPassword):
+            elif(encryptedPassword and password != em.decrypt(encryptedPassword)):
                 return False, False, 0
         else:
             return False, False, 0
 
     def getUserInfo(self, identifier):
-        response = engine.call("sp_getUser",[identifier])
+        response = engine.call("sp_getUser", values = [identifier])
         for value in response:
             return list(value.fetchone())
 
@@ -56,7 +56,7 @@ class AuthManager:
         @version 1.0.0
     """
     def changeColors(self, pen_color, fill_color):
-        response = engine.callUpdateProcedure('sp_updateColorConfig', [pen_color, fill_color])
+        response = engine.callUpdateProcedure('sp_updateColorConfig', values = [pen_color, fill_color])
         
     """
         Método encargado de obtener el color de lapiz que debe ser usado por el programa.
