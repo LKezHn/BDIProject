@@ -103,12 +103,25 @@ class AdminWindow(tk.Frame):
 
         self.usersList = ttk.Frame(self.choiseBar)
         self.choiseBar.add(self.usersList, text="Listar Usuarios")
-        self.labelList = ttk.LabelFrame(self.usersList, text="Usuario")
-        self.labelList.grid(column=0, row=0, padx=5, pady=10)
-        self.listBtn = ttk.Button(self.labelList, text="Listado completo")
-        self.listBtn.grid(column=0, row=0, padx=4, pady=4)
-        self.scrolledtext1=st.ScrolledText(self.labelList, width=45, height=22)
-        self.scrolledtext1.grid(column=0,row=1, padx=10, pady=10)
+        # self.labelList = ttk.LabelFrame(self.usersList, text="Usuario")
+        # self.labelList.grid(column=0, row=0, padx=5, pady=10)
+        # self.listBtn = ttk.Button(self.labelList, text="Listado completo")
+        # self.listBtn.grid(column=0, row=0, padx=4, pady=4)
+        # self.scrolledtext1=st.ScrolledText(self.labelList, width=45, height=22)
+        # self.scrolledtext1.grid(column=0,row=1, padx=10, pady=10)
+        self.treeview = ttk.Treeview(self.usersList, columns=("username", "password", "role", "drawNumber"))
+        self.treeview.column("#0", width=40, stretch=False)
+        self.treeview.column("username", width=100, stretch=False)
+        self.treeview.column("password", width=100, stretch=False)
+        self.treeview.column("role", width=100, stretch=False)
+        self.treeview.column("drawNumber", width=100, stretch=False)
+        self.treeview.heading("#0", text ="id")
+        self.treeview.heading("username", text ="Username")
+        self.treeview.heading("password", text = "Password")
+        self.treeview.heading("role", text = "Role")
+        self.treeview.heading("drawNumber", text = "No. Draws")
+
+        self.treeview.pack()
 
         
 
