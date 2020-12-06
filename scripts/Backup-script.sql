@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS Drawing (
   id INT NOT NULL,
   id_user INT NOT NULL,
   tex_name VARCHAR(45) NOT NULL,
-  blo_drawingData BLOB NOT NULL,
+  blo_drawingData BLOB NOT JSON,
   PRIMARY KEY (id),
     FOREIGN KEY (id_user) REFERENCES User(id)
 );
@@ -137,7 +137,7 @@ DELIMITER $$
   -- -----------------------------------------------------
   DROP PROCEDURE IF EXISTS sp_addUser$$
   
-  CREATE PROCEDURE sp_addUser(IN new_username TEXT, IN new_password TEXT, IN new_idrole CHAR(3))
+  CREATE PROCEDURE sp_addUser(IN new_username TEXT, IN new_password TEXT, IN new_idrole INT(3))
   BEGIN
     INSERT INTO User(id_role, tex_userName, tex_password) VALUES (new_idrole, new_username, new_password);
   END$$
@@ -147,7 +147,7 @@ DELIMITER $$
   -- -----------------------------------------------------
   DROP PROCEDURE IF EXISTS sp_updateUserInfo$$
 
-  CREATE PROCEDURE sp_updateUserInfo(IN id_user INT, IN new_username TEXT, IN new_password TEXT, IN new_role CHAR(3))
+  CREATE PROCEDURE sp_updateUserInfo(IN id_user INT, IN new_username TEXT, IN new_password TEXT, IN new_role INT(3))
   BEGIN
     UPDATE User SET tex_userName = new_username, tex_password = new_password, id_role = new_role WHERE User.id = id_user;
   END$$

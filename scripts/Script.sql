@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS Drawing (
   id INT NOT NULL,
   id_user INT NOT NULL,
   tex_name VARCHAR(45) NOT NULL,
-  blo_drawingData BLOB NOT NULL,
+  blo_drawingData JSON NOT NULL,
   PRIMARY KEY (id),
     FOREIGN KEY (id_user) REFERENCES User(id)
 );
@@ -202,7 +202,7 @@ DELIMITER $$
   -- -----------------------------------------------------
   DROP PROCEDURE IF EXISTS sp_addDrawing$$
   
-  CREATE PROCEDURE sp_addDrawing(IN id_user INT, IN drawing_name TEXT, IN drawingData BLOB)
+  CREATE PROCEDURE sp_addDrawing(IN id_user INT, IN drawing_name TEXT, IN drawingData JSON)
   BEGIN
     INSERT INTO Drawing(id_user ,tex_name, blo_drawingData) VALUES(id_user, drawing_name, drawingData);
   END$$
@@ -212,7 +212,7 @@ DELIMITER $$
   -- -----------------------------------------------------
   DROP PROCEDURE IF EXISTS sp_updateDrawing$$
   
-  CREATE PROCEDURE sp_updateDrawing(IN id_drawing INT, IN drawing_name TEXT, IN drawingData BLOB)
+  CREATE PROCEDURE sp_updateDrawing(IN id_drawing INT, IN drawing_name TEXT, IN drawingData JSON)
   BEGIN
     UPDATE Drawing SET tex_name = drawing_name, blo_drawingData = drawingData WHERE Drawing.id = id_drawing;
   END$$
