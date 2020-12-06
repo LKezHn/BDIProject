@@ -1,7 +1,10 @@
-import tkinter as tk
-from tkinter import scrolledtext as st
+import tkinter as tk, re
+from tkinter import scrolledtext as st, messagebox
 from tkinter import ttk
 
+from ..modules.admin.AdminActionsManager import AdminActionsManager
+
+aam = AdminActionsManager()
 class AdminWindow(tk.Frame):
 
     def __init__(self,master,parent):
@@ -10,7 +13,28 @@ class AdminWindow(tk.Frame):
         self.master = master
         self.buildWindow()
         
-        
+    def isValidField(self, field, typeOfField):
+        if field != "":
+            if typeOfField == 'password':
+                if not re.match(r"[A-Za-z0-9]+", field):
+                    return False
+            elif typeOfField == 'text':
+                if not re.match(r"\w+",field):
+                    return False
+        else:
+            return False
+
+        return True
+
+    def addNewUser(self):
+        if(self.isValidField(self.usernameValue.get(), "text") and self.isValidField(self.passwordValue.get(), "password")):
+            res = aam.addUser(self.usernameValue.get(), self.passwordValue.get())
+            if res:
+                messagebox.showinfo("Done!", "User added")
+                self.usernameValue.set("")
+                self.passwordValue.set("")
+        else:
+            messagebox.showerror("Error","You have used illegal characters and fill all the fields", parent=self)
 
     def buildWindow(self):
         self.master.title('Admin Window')
@@ -37,7 +61,7 @@ class AdminWindow(tk.Frame):
         self.passwordValue = tk.StringVar()
         self.password = ttk.Entry(self.labelName, textvariable=self.passwordValue)
         self.password.grid(column=1, row=1, padx=10, pady=10)
-        self.addBtn = ttk.Button(self.labelName, text="Confirmar") #Forma completa => self.addBtn = ttk.Button(self.labelName, text="Confirmar", command=AccionAEjecutar)
+        self.addBtn = ttk.Button(self.labelName, text="Confirmar", command=self.addNewUser) #Forma completa => self.addBtn = ttk.Button(self.labelName, text="Confirmar", command=AccionAEjecutar)
         self.addBtn.grid(column=1, row=2, padx=10, pady=10)
 
 
