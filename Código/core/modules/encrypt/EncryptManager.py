@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
+import json
 from .AES import AESCipher
+
 
 # En lugar de "admin" se pasaria la contraseña del usuario administrador desde la base de datos
 aem = AESCipher("admin")
@@ -21,5 +23,13 @@ class EncryptManager:
 
     def decrypt(self, text):
         return aem.decrypt(text)
+
+    def encryptDraw(self, content):
+        draw = content[1:-1]
+        return "{%s}" % aem.encrypt(draw)
+
+    def decryptDraw(self, content):
+        draw = content[1:-1]
+        return "{%s}" % aem.decrypt(draw)
 
 
