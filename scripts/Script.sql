@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS User (
 DROP TABLE IF EXISTS Drawing ;
 
 CREATE TABLE IF NOT EXISTS Drawing (
-  id INT NOT NULL,
+  id INT AUTO_INCREMENT NOT NULL,
   id_user INT NOT NULL,
   tex_name VARCHAR(45) NOT NULL,
   blo_drawingData JSON NOT NULL,
@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS Drawing (
 DROP TABLE IF EXISTS Binnacle;
 
 CREATE TABLE IF NOT EXISTS Binnacle (
-  id INT NOT NULL,
+  id INT AUTO_INCREMENT NOT NULL,
   id_user INT NOT NULL,
   dat_date DATETIME NOT NULL,
   tex_command TEXT NOT NULL,
@@ -168,7 +168,10 @@ DELIMITER $$
   
   CREATE PROCEDURE sp_getDrawingList()
   BEGIN
-    SELECT Drawing.id AS "id", Drawing.tex_name AS "Name" FROM Drawing;
+    SELECT Drawing.id, Drawing.tex_name, User.tex_userName 
+    FROM 
+      Drawing
+    JOIN User ON Drawing.id_user = User.id;
   END$$
   
   -- -----------------------------------------------------
@@ -194,7 +197,7 @@ DELIMITER $$
   
   CREATE PROCEDURE sp_getOneDrawing(IN id_drawing INT)
   BEGIN
-    SELECT * FROM Drawing WHERE Drawing.id = id_drawing;
+    SELECT blo_drawingData FROM Drawing WHERE Drawing.id = id_drawing;
   END$$
   
   -- -----------------------------------------------------
@@ -202,9 +205,9 @@ DELIMITER $$
   -- -----------------------------------------------------
   DROP PROCEDURE IF EXISTS sp_addDrawing$$
   
-  CREATE PROCEDURE sp_addDrawing(IN id_user INT, IN drawing_name TEXT, IN drawingData JSON)
+  CREATE PROCEDURE sp_addDrawing(IN idUser INT, IN drawing_name TEXT, IN drawingData JSON)
   BEGIN
-    INSERT INTO Drawing(id_user ,tex_name, blo_drawingData) VALUES(id_user, drawing_name, drawingData);
+    INSERT INTO Drawing(id_user ,tex_name, blo_drawingData) VALUES(idUser, drawing_name, drawingData);
   END$$
   
   -- -----------------------------------------------------

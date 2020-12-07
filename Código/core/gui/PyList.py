@@ -23,10 +23,10 @@ class PyList:
 		return len(self.gcList)
         
 	# Este comando es el encargado de escribir un archivo json al guardar
-	def write(self,filename): 
+	def write(self): 
 		# filename contiene la ruta del archivo donde guardaremos el json
 		# json_content contiene los comandos json 
-		file = open(filename,"w")
+		#file = open(filename,"w")
 
 		# ingresamos los primeros 2 objetos del json {"GraphicsCommands":{"Command":{}}}
 		json_content = '{\n\t"GraphicsCommands":\n\t{\n'
@@ -39,8 +39,8 @@ class PyList:
 		json_content = json_content[:-2] + "\n"
 		json_content += '%s]\n' % ("\t"*2)
 		json_content += '\t}\n}'
-		file.write(json_content)
-		file.close()
+		#file.write(json_content)
+		#file.close()
 		
 		return json_content
 
@@ -48,7 +48,7 @@ class PyList:
 	# y tambien creara la lista de comandos a dibujar
 	def parse(self,filename):    
 		
-		js = json.load(open(filename))
+		js = filename#json.loads(filename)
 		Commands = js["GraphicsCommands"]["Command"]
 	
 		for jsonCommand in Commands:

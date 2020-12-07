@@ -35,10 +35,20 @@ class AdminWindow(tk.Frame):
                 messagebox.showinfo("Done!", "User added")
                 self.usernameValue.set("")
                 self.passwordValue.set("")
+                self.getUsersList()
         else:
             messagebox.showerror("Error","You have used illegal characters and fill all the fields", parent=self)
 
-               
+    def getUsersList(self):
+        for i in self.treeview.get_children():
+            self.treeview.delete(i)
+        users = aam.getUsers()
+        for user in users:
+            if user[2] != "admin":
+                self.treeview.insert("", "end", text=user[0], value=(user[1], em.decrypt(user[2]), user[3]))
+            else:
+                self.treeview.insert("", "end", text=user[0], value=(user[1], user[2], user[3]))     
+
 
     def buildWindow(self):
         self.master.title('Admin Window')
@@ -134,11 +144,8 @@ class AdminWindow(tk.Frame):
 
         self.treeview.pack()
 
-        
-
         self.choiseBar.grid(column=0, row=0)
 
-        
         
         
 

@@ -1,6 +1,6 @@
 
 import turtle
-import tkinter
+import tkinter, json
 import tkinter.colorchooser
 import tkinter.filedialog
 from ..entities.User import User
@@ -8,6 +8,8 @@ from ..modules.auth.AuthManager import AuthManager
 from .DrawManager import *
 from .AuthWindow import AuthWindow
 from .AdminWindow import AdminWindow
+from .LoadDrawWindow import LoadDrawWindow
+from .SaveDrawWindow import SaveDrawWindow
 from .PyList import PyList
         
 am = AuthManager()
@@ -16,6 +18,7 @@ class DrawingWindow(tkinter.Frame):
     def __init__(self, master=None):
         super().__init__(master)
         self.pack()
+        self.draw_id = { 'content' : ""}
         self.buildAuthWindow()
         self.buildWindow()    
         self.graphicsCommands = PyList()
@@ -43,7 +46,7 @@ class DrawingWindow(tkinter.Frame):
             self.newWindow = tkinter.Toplevel(self.master)
             AdminWindow(self.newWindow,self.master)
             self.master.wait_window(self.newWindow)
-        
+    
         # This code is called by the "New" menu item below when it is selected.
         # The same applies for loadFile, addToFile, and saveFile below. The 
         # "Exit" menu item below calls quit on the "master" or root window. 
@@ -92,28 +95,33 @@ class DrawingWindow(tkinter.Frame):
                     self.append(cmd)
 
         def loadFile():
-            filename = tkinter.filedialog.askopenfilename(
-							title="Select a Graphics File",									
-							filetypes = [("Archivo Json",(".json"))],
-							defaultextension = ".json"
-							)
+            self.loadWindow = tkinter.Toplevel(self.master)
+            LoadDrawWindow(self.loadWindow,self.master, self.authUser.getID(), self.authUser.getRole(), self.draw_id)
+            self.master.wait_window(self.loadWindow)
+            # Convierto a diccionario el dibujo que me envio la base
+            filename = json.loads(self.draw_id['content'])
+            # filename = tkinter.filedialog.askopenfilename(
+			# 				title="Select a Graphics File",									
+			# 				filetypes = [("Archivo Json",(".json"))],
+			# 				defaultextension = ".json"
+			# 				)
 
-			# Comprobamos que halla selecionado un archivo
-            if(filename):
+			# # Comprobamos que halla selecionado un archivo
+            # if(filename):
                 #Limpiamos el lienzo
-                newWindow()
+            newWindow()
 
-				# Reinicializamos los comandos usados para una nueva imagen. 
-                self.graphicsCommands = PyList()
-				# Esta funcion creara la lista de comandos a leer.
-                self.graphicsCommands.parse(filename)
+            # Reinicializamos los comandos usados para una nueva imagen. 
+            self.graphicsCommands = PyList()
+            # Esta funcion creara la lista de comandos a leer.
+            self.graphicsCommands.parse(filename)
 
-				# Dibujamos la imagen
-                for cmd in self.graphicsCommands:
-                    cmd.draw(theTurtle)
+            # Dibujamos la imagen
+            for cmd in self.graphicsCommands:
+                cmd.draw(theTurtle)
 
-				# Actualiza la ventana despues de divbujar la imagen.
-                screen.update()
+            # Actualiza la ventana despues de divbujar la imagen.
+            screen.update()
 
         fileMenu.add_command(label="Load...",command=loadFile)
 
@@ -121,15 +129,17 @@ class DrawingWindow(tkinter.Frame):
             # abrimos un cuadro de dialogo
 			# tittle - Titulo del cuadro de dialogo
 			# filestypes - Enviamo un arreglo de  tuplas [(descripcion, tipo de archivo)]
-            filename = tkinter.filedialog.asksaveasfilename(
-                        title="Guardar en...",
-                        filetypes = [("Archivo Json",(".json"))],
-                        defaultextension = ".json")
-			
+            # filename = tkinter.filedialog.asksaveasfilename(
+            #             title="Guardar en...",
+            #             filetypes = [("Archivo Json",(".json"))],
+            #             defaultextension = ".json")
+            
+            self.saveWindow = tkinter.Toplevel(self.master)
+            SaveDrawWindow(self.saveWindow,self.master, self.authUser.getID(), self.authUser.getRole() ,self.graphicsCommands.write())
+            self.master.wait_window(self.saveWindow)
 			# Solo entrara si elijio una ruta
-            if(filename):
-				# Crea el documento json
-                self.graphicsCommands.write(filename)
+			# Crea el documento json
+            
 		#	Este metodo se encarga de dibujar un circulo.
         fileMenu.add_command(label="Save As...",command=saveFile)
 
