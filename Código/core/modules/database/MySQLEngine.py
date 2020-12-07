@@ -62,7 +62,7 @@ class MySQLEngine:
             self.link.close()
             self.con.close()
             return results
-        elif action == 'update' or action == 'insert':
+        else:
             try:
                 self.start()
                 self.link.callproc(nameprocedure,values)
