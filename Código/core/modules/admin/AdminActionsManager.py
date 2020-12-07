@@ -17,3 +17,10 @@ class AdminActionsManager:
         if res:
             return True
         return False
+
+    def getUsers(self):
+        res = engine.call('sp_getAllUsers', 'select')
+        if res:
+            for value in res:
+                return value.fetchall()
+        return False        
