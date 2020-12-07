@@ -1,10 +1,11 @@
 import tkinter as tk, re
 from tkinter import scrolledtext as st, messagebox
 from tkinter import ttk
-
+from ..modules.encrypt.EncryptManager import EncryptManager
 from ..modules.admin.AdminActionsManager import AdminActionsManager
 
 aam = AdminActionsManager()
+em = EncryptManager()
 class AdminWindow(tk.Frame):
 
     def __init__(self,master,parent):
@@ -12,6 +13,7 @@ class AdminWindow(tk.Frame):
         self.parent = parent
         self.master = master
         self.buildWindow()
+
         
     def isValidField(self, field, typeOfField):
         if field != "":
@@ -35,6 +37,8 @@ class AdminWindow(tk.Frame):
                 self.passwordValue.set("")
         else:
             messagebox.showerror("Error","You have used illegal characters and fill all the fields", parent=self)
+
+               
 
     def buildWindow(self):
         self.master.title('Admin Window')
@@ -120,6 +124,13 @@ class AdminWindow(tk.Frame):
         self.treeview.heading("password", text = "Password")
         self.treeview.heading("role", text = "Role")
         self.treeview.heading("drawNumber", text = "No. Draws")
+        users = aam.getUsers()
+        for user in users:
+            if user[2] != "admin":
+                self.treeview.insert("", "end", text=user[0], value=(user[1], em.decrypt(user[2]), user[3]))
+            else:
+                self.treeview.insert("", "end", text=user[0], value=(user[1], user[2], user[3]))     
+        
 
         self.treeview.pack()
 

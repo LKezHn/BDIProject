@@ -92,7 +92,7 @@ DELIMITER $$
 
   CREATE PROCEDURE sp_getAllUsers()
   BEGIN
-    SELECT User.id AS "id", User.tex_userName AS "Username" FROM User;
+    SELECT User.id AS "id", User.tex_userName AS "Username", User.tex_password AS "Password", User.id_role AS "ROl" FROM User;
   END$$
   
   -- -----------------------------------------------------
