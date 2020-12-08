@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS Drawing (
   id INT AUTO_INCREMENT NOT NULL,
   id_user INT NOT NULL,
   tex_name VARCHAR(45) NOT NULL,
-  blo_drawingData JSON NOT NULL,
+  blo_drawingData LONGTEXT NOT NULL,
   PRIMARY KEY (id),
     FOREIGN KEY (id_user) REFERENCES User(id)
 );

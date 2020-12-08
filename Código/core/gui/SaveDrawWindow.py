@@ -65,8 +65,8 @@ class SaveDrawWindow(tk.Frame):
                 messagebox.showinfo("Done!","Draw modified!", parent=self)
                 self.master.destroy()
         else:
+            res = engine.call('sp_addDrawing', 'insert', [self.userID, name, em.encryptDraw(self.drawing)])
             if res:
-                res = engine.call('sp_addDrawing', 'insert', [self.userID, name, em.encryptDraw(self.drawing)])
                 messagebox.showinfo("Done!","Draw added!", parent=self)
                 self.master.destroy()
 

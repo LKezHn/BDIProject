@@ -85,7 +85,7 @@ class PyList:
 					cmd = GoToCommand(x,y,width,color)
 				elif command == "Circle":
 					radius = float(atributtes["radius"])
-					width = int(atributtes["width"])
+					width = int(float(atributtes["width"]))
 					color = atributtes["color"]
 					cmd = CircleCommand(radius,width,color)
 				elif command == "BeginFill":
