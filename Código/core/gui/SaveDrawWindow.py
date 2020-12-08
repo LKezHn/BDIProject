@@ -13,10 +13,12 @@ em = EncryptManager()
 dm = DrawingManager()
 
 class SaveDrawWindow(tk.Frame):
-    def __init__(self,master, parent, user_id, user_role, drawing):
+    def __init__(self,master, parent, user_id, user_role, drawing, draw_name = "", draw_id = 0):
         super().__init__(master)
         self.userID = user_id
         self.userRole = user_role
+        self.draw_Name = draw_name
+        self.drawId = draw_id
         self.drawing  = drawing
         self.master = master
         self.buildWindow()
@@ -46,6 +48,8 @@ class SaveDrawWindow(tk.Frame):
         self.getDrawList()
         self.treeview.pack()
         self.drawName = tk.Entry(self.master)
+        if self.draw_Name != "":
+            self.drawName.insert(0,self.draw_Name)
         self.drawName.pack()
         openButton = tk.Button(self.master, text="Save", command=self.saveDraw)
         openButton.pack()
@@ -55,10 +59,16 @@ class SaveDrawWindow(tk.Frame):
     """
     def saveDraw(self):
         name = self.drawName.get()
-        res = engine.call('sp_addDrawing', 'insert', [self.userID, name, em.encryptDraw(self.drawing)])
-        if res:
-            messagebox.showinfo("Done!","Draw added!", parent=self)
-            self.master.destroy()
+        if self.draw_Name != "":
+            res = engine.call('sp_updateDrawing', 'insert', [self.drawId, name, em.encryptDraw(self.drawing)])
+            if res:
+                messagebox.showinfo("Done!","Draw modified!", parent=self)
+                self.master.destroy()
+        else:
+            if res:
+                res = engine.call('sp_addDrawing', 'insert', [self.userID, name, em.encryptDraw(self.drawing)])
+                messagebox.showinfo("Done!","Draw added!", parent=self)
+                self.master.destroy()
 
     """
         Obteniendo lista de dibujos
@@ -72,7 +82,6 @@ class SaveDrawWindow(tk.Frame):
                 self.treeview.insert("", "end", text=draw[0], value=(draw[1], draw[2]))
             else:
                 self.treeview.insert("", "end", text=draw[0], value=(draw[1]))
-
 
 
     def centerWindow(self):

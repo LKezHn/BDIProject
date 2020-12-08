@@ -199,7 +199,7 @@ DELIMITER $$
   
   CREATE PROCEDURE sp_getOneDrawing(IN id_drawing INT)
   BEGIN
-    SELECT blo_drawingData FROM Drawing WHERE Drawing.id = id_drawing;
+    SELECT id, tex_name, blo_drawingData FROM Drawing WHERE Drawing.id = id_drawing;
   END$$
   
   -- -----------------------------------------------------

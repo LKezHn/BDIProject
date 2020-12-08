@@ -4,6 +4,7 @@ import tkinter, json
 import tkinter.colorchooser
 import tkinter.filedialog
 from ..entities.User import User
+from ..entities.Draw import Draw
 from ..modules.auth.AuthManager import AuthManager
 from .DrawManager import *
 from .AuthWindow import AuthWindow
@@ -18,7 +19,8 @@ class DrawingWindow(tkinter.Frame):
     def __init__(self, master=None):
         super().__init__(master)
         self.pack()
-        self.draw_id = { 'content' : ""}
+        self.draw = { 'content' : ""}
+        self.myDraw = Draw()
         self.buildAuthWindow()
         self.buildWindow()    
         self.graphicsCommands = PyList()
@@ -96,10 +98,13 @@ class DrawingWindow(tkinter.Frame):
 
         def loadFile():
             self.loadWindow = tkinter.Toplevel(self.master)
-            LoadDrawWindow(self.loadWindow,self.master, self.authUser.getID(), self.authUser.getRole(), self.draw_id)
+            LoadDrawWindow(self.loadWindow,self.master, self.authUser.getID(), self.authUser.getRole(), self.draw)
             self.master.wait_window(self.loadWindow)
+            if(self.draw['content'] == ''):
+                return
+            self.myDraw.new(self.draw)
             # Convierto a diccionario el dibujo que me envio la base
-            filename = json.loads(self.draw_id['content'])
+            filename = json.loads(self.draw['content'])
             # filename = tkinter.filedialog.askopenfilename(
 			# 				title="Select a Graphics File",									
 			# 				filetypes = [("Archivo Json",(".json"))],
@@ -125,18 +130,28 @@ class DrawingWindow(tkinter.Frame):
 
         fileMenu.add_command(label="Load...",command=loadFile)
 
+        
+        def processDraw(content):
+            info = json.loads(content)
+            draw = json.loads(self.myDraw.content)
+            newContent = info['GraphicsCommands']['Command']
+            draw['GraphicsCommands']['Command'] += newContent
+            self.myDraw.setDraw(json.dumps(draw))
+        
         def saveFile():
-            # abrimos un cuadro de dialogo
-			# tittle - Titulo del cuadro de dialogo
-			# filestypes - Enviamo un arreglo de  tuplas [(descripcion, tipo de archivo)]
-            # filename = tkinter.filedialog.asksaveasfilename(
-            #             title="Guardar en...",
-            #             filetypes = [("Archivo Json",(".json"))],
-            #             defaultextension = ".json")
-            
-            self.saveWindow = tkinter.Toplevel(self.master)
-            SaveDrawWindow(self.saveWindow,self.master, self.authUser.getID(), self.authUser.getRole() ,self.graphicsCommands.write())
-            self.master.wait_window(self.saveWindow)
+            if(self.myDraw.exists()):
+                processDraw(self.graphicsCommands.write())
+                self.saveWindow = tkinter.Toplevel(self.master)
+                SaveDrawWindow(self.saveWindow,self.master, self.authUser.getID(), self.authUser.getRole() ,self.myDraw.content, self.myDraw.name, self.myDraw.id)
+                self.master.wait_window(self.saveWindow)
+                self.myDraw.clear()
+                newWindow()
+            else:
+                # Solo entrara si elijio una ruta
+                self.saveWindow = tkinter.Toplevel(self.master)
+                SaveDrawWindow(self.saveWindow,self.master, self.authUser.getID(), self.authUser.getRole() ,self.graphicsCommands.write())
+                self.master.wait_window(self.saveWindow)
+                newWindow()
 			# Solo entrara si elijio una ruta
 			# Crea el documento json
             
@@ -144,8 +159,28 @@ class DrawingWindow(tkinter.Frame):
         fileMenu.add_command(label="Save As...",command=saveFile)
 
         def downloadFile():
-            print("Download file!!!!");
-        
+            if(self.myDraw.exists()):
+                processDraw(self.graphicsCommands.write())
+            # abrimos un cuadro de dialogo
+			# tittle - Titulo del cuadro de dialogo
+			# filestypes - Enviamo un arreglo de  tuplas [(descripcion, tipo de archivo)]
+                filename = tkinter.filedialog.asksaveasfilename(
+                            title="Guardar en...",
+                            filetypes = [("Archivo Json",(".json"))],
+                            defaultextension = ".json")
+                
+                if(filename):
+                    self.graphicsCommands.create(filename, self.myDraw.content)
+            else:
+                filename = tkinter.filedialog.asksaveasfilename(
+                            title="Guardar en...",
+                            filetypes = [("Archivo Json",(".json"))],
+                            defaultextension = ".json")
+                
+                if(filename):
+                    self.graphicsCommands.create(filename, self.graphicsCommands.write())
+
+
         if(self.authUser.getRole() != 0):
             fileMenu.add_command(label="Download", command=downloadFile)
         
@@ -156,6 +191,7 @@ class DrawingWindow(tkinter.Frame):
         fileMenu.add_command(label="Exit",command=self.master.quit)
         bar.add_cascade(label="File",menu=fileMenu)
         
+
         # This tells the root window to display the newly created menu bar.
         self.master.config(menu=bar)    
         
