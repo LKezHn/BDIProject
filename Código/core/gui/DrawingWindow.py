@@ -139,13 +139,6 @@ class DrawingWindow(tkinter.Frame):
             self.myDraw.setDraw(json.dumps(draw))
         
         def saveFile():
-            # abrimos un cuadro de dialogo
-			# tittle - Titulo del cuadro de dialogo
-			# filestypes - Enviamo un arreglo de  tuplas [(descripcion, tipo de archivo)]
-            # filename = tkinter.filedialog.asksaveasfilename(
-            #             title="Guardar en...",
-            #             filetypes = [("Archivo Json",(".json"))],
-            #             defaultextension = ".json")
             if(self.myDraw.exists()):
                 processDraw(self.graphicsCommands.write())
                 self.saveWindow = tkinter.Toplevel(self.master)
@@ -166,8 +159,28 @@ class DrawingWindow(tkinter.Frame):
         fileMenu.add_command(label="Save As...",command=saveFile)
 
         def downloadFile():
-            print("Download file!!!!");
-        
+            if(self.myDraw.exists()):
+                processDraw(self.graphicsCommands.write())
+            # abrimos un cuadro de dialogo
+			# tittle - Titulo del cuadro de dialogo
+			# filestypes - Enviamo un arreglo de  tuplas [(descripcion, tipo de archivo)]
+                filename = tkinter.filedialog.asksaveasfilename(
+                            title="Guardar en...",
+                            filetypes = [("Archivo Json",(".json"))],
+                            defaultextension = ".json")
+                
+                if(filename):
+                    self.graphicsCommands.create(filename, self.myDraw.content)
+            else:
+                filename = tkinter.filedialog.asksaveasfilename(
+                            title="Guardar en...",
+                            filetypes = [("Archivo Json",(".json"))],
+                            defaultextension = ".json")
+                
+                if(filename):
+                    self.graphicsCommands.create(filename, self.graphicsCommands.write())
+
+
         if(self.authUser.getRole() != 0):
             fileMenu.add_command(label="Download", command=downloadFile)
         

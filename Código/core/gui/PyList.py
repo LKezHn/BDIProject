@@ -22,6 +22,30 @@ class PyList:
 	def __len__(self):
 		return len(self.gcList)
         
+
+	# Este comando es el encargado de escribir un archivo json al guardar
+	def create(self,filename, content): 
+		# filename contiene la ruta del archivo donde guardaremos el json
+		# json_content contiene los comandos json 
+		file = open(filename,"w")
+
+		# ingresamos los primeros 2 objetos del json {"GraphicsCommands":{"Command":{}}}
+		json_content = '{\n\t"GraphicsCommands":\n\t{\n'
+		json_content += '%s"Command":\n%s[\n' % ("\t"*2,"\t"*2)
+
+		for cmd in self:
+			json_content +='%s{\n%s\n%s},\n' % ("\t"*3,str(cmd),"\t"*3)
+
+		# json_content[:-2] limpiar una coma extra en el json y agregamos un espacio
+		json_content = json_content[:-2] + "\n"
+		json_content += '%s]\n' % ("\t"*2)
+		json_content += '\t}\n}'
+		file.write(json_content)
+		file.close()
+		
+		return json_content
+
+
 	# Este comando es el encargado de escribir un archivo json al guardar
 	def write(self): 
 		# filename contiene la ruta del archivo donde guardaremos el json
