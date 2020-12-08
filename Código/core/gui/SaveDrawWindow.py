@@ -51,6 +51,7 @@ class SaveDrawWindow(tk.Frame):
         if self.draw_Name != "":
             self.drawName.insert(0,self.draw_Name)
         self.drawName.pack()
+        self.drawName.focus_set()
         openButton = tk.Button(self.master, text="Save", command=self.saveDraw)
         openButton.pack()
 
@@ -59,7 +60,9 @@ class SaveDrawWindow(tk.Frame):
     """
     def saveDraw(self):
         name = self.drawName.get()
-        if self.draw_Name != "":
+        if len(name) < 4:
+            messagebox.showerror("Error", "Name too short")
+        elif self.draw_Name != "":
             res = engine.call('sp_updateDrawing', 'insert', [self.drawId, name, em.encryptDraw(self.drawing)])
             if res:
                 messagebox.showinfo("Done!","Draw modified!", parent=self)
