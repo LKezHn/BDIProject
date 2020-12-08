@@ -56,7 +56,8 @@ class LoadDrawWindow(tk.Frame):
         def loadDraw():
             res = engine.call('sp_getOneDrawing', values = [int(self.drawSelected)])
             for value in res:
-                new_id['content'] = em.decryptDraw(value.fetchone()[0])
+                content = value.fetchone()
+                new_id['id'], new_id['name'], new_id['content'] = content[0], content[1], em.decryptDraw(content[2])
             self.master.destroy()
 
         openButton = tk.Button(self.master, text="Load", command=loadDraw)
