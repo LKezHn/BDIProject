@@ -57,7 +57,7 @@ class AuthManager:
         @version 1.0.0
     """
     def changeColors(self, pen_color, fill_color):
-        response = engine.callUpdateProcedure('sp_updateColorConfig', values = [pen_color, fill_color])
+        response = engine.call('sp_updateColorConfig', 'update', values = [pen_color, fill_color])
         
     """
         Método encargado de obtener el color de lapiz que debe ser usado por el programa.
