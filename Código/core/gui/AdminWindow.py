@@ -6,6 +6,7 @@ from ..modules.admin.AdminActionsManager import AdminActionsManager
 
 aam = AdminActionsManager()
 em = EncryptManager()
+
 class AdminWindow(tk.Frame):
 
     def __init__(self,master,parent):
@@ -52,14 +53,28 @@ class AdminWindow(tk.Frame):
                 self.treeview.insert("", "end", text=user[0], value=(user[1], user[2], user[3], user[4]))  
 
     def deleteUserSelected(self):
+<<<<<<< HEAD
         
+=======
+>>>>>>> 5d104328cfd66e12afd781e3e810ab475e346efc
         res = aam.deleteUser(self.deleteUserValue.get())
         if res:
             messagebox.showinfo("Done!", "User deleted")
             self.deleteUserValue.set("")
             self.getUsersList()    
         else:
-            messagebox.showerror("Error","You have used illegal characters and fill all the fields", parent=self) 
+            messagebox.showerror("Error","You have used illegal characters and fill all the fields", parent=self)
+
+    def updateUserSelected(self):
+        res = aam.updateUser(self.userToUpdateValue.get(), self.newUsernameValue.get(), self.newPasswordValue.get())
+        if res:
+            messagebox.showinfo("Done!", "User update")
+            self.userToUpdateValue.set("")
+            self.newUsernameValue.set("")
+            self.newPasswordValue.set("")
+            self.getUsersList()    
+        else:
+            messagebox.showerror("Error","You have used illegal characters and fill all the fields", parent=self)         
 
                    
 
@@ -113,7 +128,7 @@ class AdminWindow(tk.Frame):
         self.newPasswordValue = tk.StringVar()
         self.newPassword = ttk.Entry(self.labelUpdateName, textvariable=self.newPasswordValue)
         self.newPassword.grid(column=1, row=2, padx=10, pady=10)
-        self.updateBtn = ttk.Button(self.labelUpdateName, text="Confirmar") #Lo mismo que el anterior
+        self.updateBtn = ttk.Button(self.labelUpdateName, text="Confirmar", command=self.updateUserSelected) #Lo mismo que el anterior
         self.updateBtn.grid(column=1, row=5, padx=10, pady=10)
 
         self.deleteUser = ttk.Frame(self.choiseBar)

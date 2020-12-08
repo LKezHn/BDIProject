@@ -29,4 +29,11 @@ class AdminActionsManager:
         res = engine.call('sp_deleteUser', 'delete', [username])
         if res:
             return True 
-        return False               
+        return False 
+
+    def updateUser(self, username, newUsername, newPassword):
+        encryptedNewPassword = em.encrypt(newPassword)
+        res = engine.call('sp_updateUserInfo', 'update', [username, newUsername, encryptedNewPassword])
+        if res:
+            return True
+        return False                      
