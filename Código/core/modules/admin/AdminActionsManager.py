@@ -23,4 +23,10 @@ class AdminActionsManager:
         if res:
             for value in res:
                 return value.fetchall()
-        return False        
+        return False
+
+    def deleteUser(self, username):
+        res = engine.call('sp_deleteUser', 'delete', [username])
+        if res:
+            return True 
+        return False               

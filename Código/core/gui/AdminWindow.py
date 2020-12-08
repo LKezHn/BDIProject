@@ -47,7 +47,20 @@ class AdminWindow(tk.Frame):
             if user[2] != "admin":
                 self.treeview.insert("", "end", text=user[0], value=(user[1], em.decrypt(user[2]), user[3]))
             else:
-                self.treeview.insert("", "end", text=user[0], value=(user[1], user[2], user[3]))     
+                self.treeview.insert("", "end", text=user[0], value=(user[1], user[2], user[3]))  
+
+    def deleteUserSelected(self):
+
+        
+        res = aam.deleteUser(self.deleteUserValue.get())
+        if res:
+            messagebox.showinfo("Done!", "User deleted")
+            self.deleteUserValue.set("")
+            self.getUsersList()    
+        else:
+            messagebox.showerror("Error","You have used illegal characters and fill all the fields", parent=self) 
+
+                   
 
 
     def buildWindow(self):
@@ -111,7 +124,7 @@ class AdminWindow(tk.Frame):
         self.deleteUserValue = tk.StringVar()
         self.userToDelete = ttk.Entry(self.labelDeleteName, textvariable=self.deleteUserValue)
         self.userToDelete.grid(column=1, row=0, padx=10, pady=10)
-        self.deleteBtn = ttk.Button(self.labelDeleteName, text="Confirmar")
+        self.deleteBtn = ttk.Button(self.labelDeleteName, text="Confirmar", command=self.deleteUserSelected)
         self.deleteBtn.grid(column=1, row=2, padx=10, pady=10) 
 
 
@@ -137,9 +150,9 @@ class AdminWindow(tk.Frame):
         users = aam.getUsers()
         for user in users:
             if user[2] != "admin":
-                self.treeview.insert("", "end", text=user[0], value=(user[1], em.decrypt(user[2]), user[3]))
+                self.treeview.insert("", "end", text=user[0], value=(user[1], em.decrypt(user[2]), user[3], user[4]))
             else:
-                self.treeview.insert("", "end", text=user[0], value=(user[1], user[2], user[3]))     
+                self.treeview.insert("", "end", text=user[0], value=(user[1], user[2], user[3], user[4]))     
         
 
         self.treeview.pack()

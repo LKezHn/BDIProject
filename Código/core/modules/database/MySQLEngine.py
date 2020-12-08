@@ -49,6 +49,10 @@ class MySQLEngine:
         self.link.execute(query)
         self.con.commit()
 
+    def delete(self,query):
+        self.link.execute(query)
+        self.con.commit()    
+
     """
         Método encargado de llamar a un procedimiento almacenado
         @param query Es la query a ejecutar
