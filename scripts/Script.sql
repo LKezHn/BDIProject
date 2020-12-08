@@ -31,7 +31,7 @@ DROP TABLE IF EXISTS User;
 CREATE TABLE IF NOT EXISTS User (
   id INT NOT NULL AUTO_INCREMENT,
   id_role INT NOT NULL DEFAULT 2,
-  tex_userName TEXT NOT NULL,
+  tex_userName TEXT NOT NULL UNIQUE,
   tex_password TEXT NOT NULL,
   PRIMARY KEY (id), 
   FOREIGN KEY (id_role) REFERENCES Roles(id)
@@ -92,7 +92,9 @@ DELIMITER $$
 
   CREATE PROCEDURE sp_getAllUsers()
   BEGIN
-    SELECT User.id AS "id", User.tex_userName AS "Username", User.tex_password AS "Password", User.id_role AS "ROl" FROM User;
+    SELECT User.id AS "id", User.tex_userName AS "Username", User.tex_password AS "Password", Roles.tex_name AS "Rol", 
+    (SELECT COUNT(*) FROM Drawing JOIN User AS SubUser ON Drawing.id_user = SubUser.id WHERE User.id = SubUser.id) AS "No Dibujos" 
+    FROM User JOIN Roles ON User.id_role = Roles.id;
   END$$
   
   -- -----------------------------------------------------
@@ -156,9 +158,9 @@ DELIMITER $$
   -- -----------------------------------------------------
   DROP PROCEDURE IF EXISTS sp_deleteUser$$
   
-  CREATE PROCEDURE sp_deleteUser(IN id_user INT)
+  CREATE PROCEDURE sp_deleteUser(IN user_username TEXT)
   BEGIN
-    DELETE FROM User WHERE User.id = id_user;
+    DELETE FROM User WHERE User.tex_userName = user_username;
   END$$
   
   -- -----------------------------------------------------
