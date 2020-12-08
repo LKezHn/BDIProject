@@ -30,7 +30,9 @@ class AdminWindow(tk.Frame):
         return True
 
     def addNewUser(self):
-        if(self.isValidField(self.usernameValue.get(), "text") and self.isValidField(self.passwordValue.get(), "password")):
+        if(len(self.usernameValue.get()) < 4 or len(self.passwordValue.get()) < 4):
+            messagebox.showerror("Error","Username or password too short", parent=self)
+        elif(self.isValidField(self.usernameValue.get(), "text") and self.isValidField(self.passwordValue.get(), "password")):
             res = aam.addUser(self.usernameValue.get(), self.passwordValue.get())
             if res:
                 messagebox.showinfo("Done!", "User added")
@@ -51,6 +53,7 @@ class AdminWindow(tk.Frame):
                 self.treeview.insert("", "end", text=user[0], value=(user[1], user[2], user[3], user[4]))  
 
     def deleteUserSelected(self):
+        
         res = aam.deleteUser(self.deleteUserValue.get())
         if res:
             messagebox.showinfo("Done!", "User deleted")
