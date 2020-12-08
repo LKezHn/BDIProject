@@ -21,7 +21,6 @@ class SaveDrawWindow(tk.Frame):
         self.master = master
         self.buildWindow()
 
-
     """
         Construyo la ventana
     """
@@ -50,7 +49,7 @@ class SaveDrawWindow(tk.Frame):
         self.drawName.pack()
         openButton = tk.Button(self.master, text="Save", command=self.saveDraw)
         openButton.pack()
-    
+
     """
         Guardo el dibujo, si todo salio bien muestro el mensaje de guardao y cierro la ventana
     """
