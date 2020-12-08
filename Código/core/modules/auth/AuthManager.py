@@ -33,13 +33,14 @@ class AuthManager:
         for value in response:
             user_id, encryptedPassword = list(value.fetchone())
         
-        if (username == 'admin' and password == encryptedPassword):
-            return True, True, user_id
-        elif username != 'admin':
-            if(encryptedPassword and password == em.decrypt(encryptedPassword)):
-                return True, False, user_id
-            elif(encryptedPassword and password != em.decrypt(encryptedPassword)):
-                return False, False, 0
+        if encryptedPassword != "None":
+            if (username == 'admin' and password == encryptedPassword):
+                return True, True, user_id
+            elif username != 'admin':
+                if(encryptedPassword and password == em.decrypt(encryptedPassword)):
+                    return True, False, user_id
+                elif(encryptedPassword and password != em.decrypt(encryptedPassword)):
+                    return False, False, 0
         else:
             return False, False, 0
 

@@ -49,7 +49,6 @@ class AuthWindow(tk.Frame):
                     messagebox.showerror("Error","You have used illegal characters", parent=self)
                 else:
                     user["isAuth"], user["isAdmin"], user['id'] = am.isAuth(username, password)
-
                     if not user['isAuth']:
                         messagebox.showerror("Error","Incorrect password", parent=self)
                     else:
