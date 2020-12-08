@@ -53,10 +53,7 @@ class AdminWindow(tk.Frame):
                 self.treeview.insert("", "end", text=user[0], value=(user[1], user[2], user[3], user[4]))  
 
     def deleteUserSelected(self):
-<<<<<<< HEAD
         
-=======
->>>>>>> 5d104328cfd66e12afd781e3e810ab475e346efc
         res = aam.deleteUser(self.deleteUserValue.get())
         if res:
             messagebox.showinfo("Done!", "User deleted")
