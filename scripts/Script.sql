@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS Drawing (
   id INT AUTO_INCREMENT NOT NULL,
   id_user INT NOT NULL,
   tex_name VARCHAR(45) NOT NULL,
-  blo_drawingData LONGTEXT NOT NULL,
+  blo_drawingData JSON NOT NULL,
   PRIMARY KEY (id),
     FOREIGN KEY (id_user) REFERENCES User(id)
 );
@@ -123,6 +123,16 @@ DELIMITER $$
     SELECT User.tex_password, User.id INTO user_password, id_user FROM User WHERE User.tex_userName = username;
     SELECT id_user, user_password;
   END$$
+
+  -- -----------------------------------------------------
+  -- Get user username
+  -- -----------------------------------------------------
+  DROP PROCEDURE IF EXISTS sp_authUserName$$
+
+  CREATE PROCEDURE sp_authUserName(IN auth_username TEXT)
+  BEGIN
+    SELECT User.tex_userName FROM User WHERE User.tex_userName = auth_username;
+  END$$  
   
   -- -----------------------------------------------------
   -- Get all the users with operator role

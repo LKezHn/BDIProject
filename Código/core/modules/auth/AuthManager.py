@@ -9,7 +9,7 @@ engine = MySQLEngine()
 
 """
     Clase encargada de manejar las acciones relacionadas con la autenticación de un usuario.
-    @author lemartinezm@unah.hn
+    @authors lemartinezm@unah.hn eglopezl@unah.hn
     @version 1.0.0
     @date 2020/12/01
 """
@@ -43,6 +43,19 @@ class AuthManager:
                     return False, False, 0
         else:
             return False, False, 0
+
+    """
+    Metodo encargado en comprobar si un usuario existe.
+    @param username es el usuario a verificar
+    @author eglopezl@unah.hn
+    @version 1.0.0
+    """
+    def userIsAuth(self, username):
+        res = engine.call('sp_authUserName', values=[username])
+        if res:
+            for user in res:
+                return user.fetchone()
+        return False           
 
     def getUserInfo(self, identifier):
         response = engine.call("sp_getUser", values = [identifier])
