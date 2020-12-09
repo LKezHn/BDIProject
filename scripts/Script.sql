@@ -123,6 +123,16 @@ DELIMITER $$
     SELECT User.tex_password, User.id INTO user_password, id_user FROM User WHERE User.tex_userName = username;
     SELECT id_user, user_password;
   END$$
+
+  -- -----------------------------------------------------
+  -- Get user username
+  -- -----------------------------------------------------
+  DROP PROCEDURE IF EXISTS sp_authUserName$$
+
+  CREATE PROCEDURE sp_authUserName(IN auth_username TEXT)
+  BEGIN
+    SELECT User.tex_userName FROM User WHERE User.tex_userName = auth_username;
+  END$$  
   
   -- -----------------------------------------------------
   -- Get all the users with operator role

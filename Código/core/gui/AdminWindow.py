@@ -3,9 +3,11 @@ from tkinter import scrolledtext as st, messagebox
 from tkinter import ttk
 from ..modules.encrypt.EncryptManager import EncryptManager
 from ..modules.admin.AdminActionsManager import AdminActionsManager
+from ..modules.auth.AuthManager import AuthManager
 
 aam = AdminActionsManager()
 em = EncryptManager()
+am = AuthManager()
 
 class AdminWindow(tk.Frame):
 
@@ -15,7 +17,12 @@ class AdminWindow(tk.Frame):
         self.master = master
         self.buildWindow()
 
-        
+    """
+    Metodo encargado de la validacion utlizando expreiones regulares de los campos en los Adminoptions.
+    @param valor del de lo ingresado en el input.
+    @param tipo de campo del input.
+    @author lemartinezm@unah.hn
+    """   
     def isValidField(self, field, typeOfField):
         if field != "":
             if typeOfField == 'password':
@@ -29,6 +36,10 @@ class AdminWindow(tk.Frame):
 
         return True
 
+    """
+    Metodo encargado de agregar usuarios, validando los campos correspondientes.
+    @author lemartinezm@unah.hn
+    """
     def addNewUser(self):
         if(len(self.usernameValue.get()) < 4 or len(self.passwordValue.get()) < 4):
             messagebox.showerror("Error","Username or password too short", parent=self)
@@ -42,6 +53,10 @@ class AdminWindow(tk.Frame):
         else:
             messagebox.showerror("Error","You have used illegal characters and fill all the fields", parent=self)
 
+    """
+    Metodo que actualiza la lista de usuarios cada vez que se realicen cambios en la base.
+    @author lemartinezm@unah.hn
+    """
     def getUsersList(self):
         for i in self.treeview.get_children():
             self.treeview.delete(i)
@@ -52,30 +67,59 @@ class AdminWindow(tk.Frame):
             else:
                 self.treeview.insert("", "end", text=user[0], value=(user[1], user[2], user[3], user[4]))  
 
+    """
+    Metodo de eliminacion de usuarios, Verificando si el usuario existe lo elimina.
+    @author eglopezl@unah.hn
+    """
     def deleteUserSelected(self):
-        
-        res = aam.deleteUser(self.deleteUserValue.get())
-        if res:
-            messagebox.showinfo("Done!", "User deleted")
-            self.deleteUserValue.set("")
-            self.getUsersList()    
+        if(len(self.deleteUserValue.get()) < 4):
+            messagebox.showerror("Error","Username too short", parent=self)    
+        elif(self.isValidField(self.deleteUserValue.get(), "text")):
+            if self.deleteUserValue.get() == "admin":
+                messagebox.showerror("Error", "Admin can't be deleted", parent=self)
+            else:
+                if am.userIsAuth(self.deleteUserValue.get()):
+                    res = aam.deleteUser(self.deleteUserValue.get())
+                    if res:
+                        messagebox.showinfo("Done!", "User deleted")
+                        self.deleteUserValue.set("")
+                        self.getUsersList()
+                else:
+                    messagebox.showerror("Error", "User doesn't exist")            
         else:
             messagebox.showerror("Error","You have used illegal characters and fill all the fields", parent=self)
+                  
 
+    """
+    Metodo que actualiza el usuario a modificar por su username.
+    @author eglopezl@unah.hn
+    """
     def updateUserSelected(self):
-        res = aam.updateUser(self.userToUpdateValue.get(), self.newUsernameValue.get(), self.newPasswordValue.get())
-        if res:
-            messagebox.showinfo("Done!", "User update")
-            self.userToUpdateValue.set("")
-            self.newUsernameValue.set("")
-            self.newPasswordValue.set("")
-            self.getUsersList()    
+        if(len(self.userToUpdateValue.get()) < 4 or len(self.newUsernameValue.get()) < 4 or len(self.newPasswordValue.get()) < 4):
+            messagebox.showerror("Error","Some field is too short", parent=self)
+        elif(self.isValidField(self.userToUpdateValue.get(), "text") and self.isValidField(self.newUsernameValue.get(), "text") and self.isValidField(self.newPasswordValue.get(), "text")):    
+            if self.userToUpdateValue.get() == "admin":
+                messagebox.showerror("Error","Admin can't be modified")
+            else:
+                if am.userIsAuth(self.userToUpdateValue.get()):
+                    res = aam.updateUser(self.userToUpdateValue.get(), self.newUsernameValue.get(), self.newPasswordValue.get())
+                    if res:
+                        messagebox.showinfo("Done!", "User update")
+                        self.userToUpdateValue.set("")
+                        self.newUsernameValue.set("")
+                        self.newPasswordValue.set("")
+                        self.getUsersList()
+                else:
+                     messagebox.showerror("Error", "User doesn't exist")           
         else:
             messagebox.showerror("Error","You have used illegal characters and fill all the fields", parent=self)         
 
                    
 
-
+    """
+    Construccion de la ventana de AdminOPtions.
+    @author eglopezl@unah.hn
+    """
     def buildWindow(self):
         self.master.title('Admin Window')
         self.master.geometry('500x500')
@@ -86,7 +130,10 @@ class AdminWindow(tk.Frame):
         self.choiseBar = ttk.Notebook(self.master)
         
 
-        
+        """
+        Construccion del formulario de crear usuario.
+        @author eglopezl@unah.hn
+        """
         self.addUser = ttk.Frame(self.choiseBar)
         self.choiseBar.add(self.addUser, text="Crear Usuario")
         self.labelName = ttk.LabelFrame(self.addUser, text="Usuario")
@@ -101,11 +148,14 @@ class AdminWindow(tk.Frame):
         self.passwordValue = tk.StringVar()
         self.password = ttk.Entry(self.labelName, textvariable=self.passwordValue)
         self.password.grid(column=1, row=1, padx=10, pady=10)
-        self.addBtn = ttk.Button(self.labelName, text="Confirmar", command=self.addNewUser) #Forma completa => self.addBtn = ttk.Button(self.labelName, text="Confirmar", command=AccionAEjecutar)
+        self.addBtn = ttk.Button(self.labelName, text="Confirmar", command=self.addNewUser)
         self.addBtn.grid(column=1, row=2, padx=10, pady=10)
 
 
-        
+        """
+        Se crea formulario para la actualizacion del Usuario especificado por su username.
+        @author eglopezl@unah.hn
+        """
         self.updateUser = ttk.Frame(self.choiseBar)
         self.choiseBar.add(self.updateUser, text="Modificar Usuario")
         self.labelUpdateName = ttk.LabelFrame(self.updateUser, text="Usuario")
@@ -125,9 +175,13 @@ class AdminWindow(tk.Frame):
         self.newPasswordValue = tk.StringVar()
         self.newPassword = ttk.Entry(self.labelUpdateName, textvariable=self.newPasswordValue)
         self.newPassword.grid(column=1, row=2, padx=10, pady=10)
-        self.updateBtn = ttk.Button(self.labelUpdateName, text="Confirmar", command=self.updateUserSelected) #Lo mismo que el anterior
+        self.updateBtn = ttk.Button(self.labelUpdateName, text="Confirmar", command=self.updateUserSelected)
         self.updateBtn.grid(column=1, row=5, padx=10, pady=10)
 
+
+        """Creacion del formulario del Usuario a borrar mediante el username ingresado.
+        @author eglopezl@unah.hn
+        """
         self.deleteUser = ttk.Frame(self.choiseBar)
         self.choiseBar.add(self.deleteUser, text="Eliminar Usuario")
         self.labelDeleteName = ttk.LabelFrame(self.deleteUser, text="Usuario")
@@ -141,14 +195,12 @@ class AdminWindow(tk.Frame):
         self.deleteBtn.grid(column=1, row=2, padx=10, pady=10) 
 
 
+        """
+        Tabla donde se visualizan los usuarios existentes.
+        @authors lemartinezm@unah.hn eglopezl@unah.hn
+        """
         self.usersList = ttk.Frame(self.choiseBar)
         self.choiseBar.add(self.usersList, text="Listar Usuarios")
-        # self.labelList = ttk.LabelFrame(self.usersList, text="Usuario")
-        # self.labelList.grid(column=0, row=0, padx=5, pady=10)
-        # self.listBtn = ttk.Button(self.labelList, text="Listado completo")
-        # self.listBtn.grid(column=0, row=0, padx=4, pady=4)
-        # self.scrolledtext1=st.ScrolledText(self.labelList, width=45, height=22)
-        # self.scrolledtext1.grid(column=0,row=1, padx=10, pady=10)
         self.treeview = ttk.Treeview(self.usersList, columns=("username", "password", "role", "drawNumber"))
         self.treeview.column("#0", width=40, stretch=False)
         self.treeview.column("username", width=100, stretch=False)
@@ -167,9 +219,7 @@ class AdminWindow(tk.Frame):
             else:
                 self.treeview.insert("", "end", text=user[0], value=(user[1], user[2], user[3], user[4]))     
         
-
         self.treeview.pack()
-
         self.choiseBar.grid(column=0, row=0)
 
         
