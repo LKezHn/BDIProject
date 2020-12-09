@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from ..encrypt.EncryptManager import EncryptManager
 from ..database.MySQLEngine import MySQLEngine
 
-
-em = EncryptManager()
 engine = MySQLEngine()
+backupEngine = MySQLEngine(2)
 
 """
     Clase encargada de manejar las acciones relacionadas con la autenticación de un usuario.
@@ -35,12 +33,12 @@ class AuthManager:
         
         if encryptedPassword != "None":
             if (username == 'admin' and password == encryptedPassword):
+                engine.call('sp_isAuth', 'update', values=[user_id])
                 return True, True, user_id
             elif username != 'admin':
-                if(encryptedPassword and password == em.decrypt(encryptedPassword)):
+                if(encryptedPassword and password == encryptedPassword):
+                    engine.call('sp_isAuth', 'update', values=[user_id])
                     return True, False, user_id
-                elif(encryptedPassword and password != em.decrypt(encryptedPassword)):
-                    return False, False, 0
         else:
             return False, False, 0
 
@@ -71,6 +69,7 @@ class AuthManager:
     """
     def changeColors(self, pen_color, fill_color):
         response = engine.call('sp_updateColorConfig', 'update', values = [pen_color, fill_color])
+        backupEngine.call('sp_updateColorConfig', 'update', values = [pen_color, fill_color])
         
     """
         Método encargado de obtener el color de lapiz que debe ser usado por el programa.

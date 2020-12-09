@@ -1,19 +1,17 @@
 # -*- coding: utf-8 -*-
 
 from ..database.MySQLEngine import MySQLEngine
-from ..encrypt.EncryptManager import EncryptManager
 
 engine = MySQLEngine()
-em = EncryptManager()
+backupEngine = MySQLEngine(2)
 
 class AdminActionsManager:
     def __init__(self):
         pass
 
     def addUser(self, username, password):
-        encryptedPassword = em.encrypt(password)
-        print(encryptedPassword)
-        res = engine.call('sp_addUser', 'insert', [username, encryptedPassword, 2])        
+        res = engine.call('sp_addUser', 'insert', [username, password, 2])        
+        backupEngine.call('sp_addUser', 'insert', [username, password, 2])        
         if res:
             return True
         return False
@@ -21,6 +19,7 @@ class AdminActionsManager:
     def getUsers(self):
         res = engine.call('sp_getAllUsers', 'select')
         if res:
+            engine.call('sp_visualizeUserList', 'insert', [1])
             for value in res:
                 return value.fetchall()
         return False
@@ -32,8 +31,8 @@ class AdminActionsManager:
         return False 
 
     def updateUser(self, username, newUsername, newPassword):
-        encryptedNewPassword = em.encrypt(newPassword)
-        res = engine.call('sp_updateUserInfo', 'update', [username, newUsername, encryptedNewPassword])
+        res = engine.call('sp_updateUserInfo', 'update', [username, newUsername, newPassword])
+        backupEngine.call('sp_updateUserInfo', 'update', [username, newUsername, newPassword])
         if res:
             return True
-        return False                      
+        return False

@@ -4,13 +4,14 @@ import tkinter as tk
 from tkinter import scrolledtext as st, messagebox
 from tkinter import ttk
 
-from ..modules.encrypt.EncryptManager import EncryptManager
 from ..modules.database.MySQLEngine import MySQLEngine
 from ..modules.draw.DrawingManager import DrawingManager
+from ..modules.compress.CompressManager import CompressManager
 
 engine = MySQLEngine()
-em = EncryptManager()
+backupEngine = MySQLEngine(2)
 dm = DrawingManager()
+cm = CompressManager()
 
 class SaveDrawWindow(tk.Frame):
     def __init__(self,master, parent, user_id, user_role, drawing, draw_name = "", draw_id = 0):
@@ -63,12 +64,14 @@ class SaveDrawWindow(tk.Frame):
         if len(name) < 4:
             messagebox.showerror("Error", "Name too short")
         elif self.draw_Name != "":
-            res = engine.call('sp_updateDrawing', 'insert', [self.drawId, name, em.encryptDraw(self.drawing)])
+            res = engine.call('sp_updateDrawing', 'insert', [self.userID ,self.drawId, name, self.drawing])
+            backupEngine.call('sp_updateDrawing', 'insert', [self.userID ,self.drawId, name, cm.compress(self.drawing)])
             if res:
                 messagebox.showinfo("Done!","Draw modified!", parent=self)
                 self.master.destroy()
         else:
-            res = engine.call('sp_addDrawing', 'insert', [self.userID, name, em.encryptDraw(self.drawing)])
+            res = engine.call('sp_addDrawing', 'insert', [self.userID, name, self.drawing])
+            backupEngine.call('sp_addDrawing', 'insert', [self.userID, name, cm.compress(self.drawing)])
             if res:
                 messagebox.showinfo("Done!","Draw added!", parent=self)
                 self.master.destroy()

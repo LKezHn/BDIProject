@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from ..database.MySQLEngine import MySQLEngine
-from ..encrypt.EncryptManager import EncryptManager
 
 engine = MySQLEngine()
-em = EncryptManager()
 
 class DrawingManager:
     def __init__(self):
@@ -22,7 +20,3 @@ class DrawingManager:
                 for value in res:
                     return value.fetchall()
         return False
-                        
-
-    def saveDraw(self, id_user, draw_title, drawing):
-        pass

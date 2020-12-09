@@ -4,13 +4,10 @@ import tkinter as tk
 from tkinter import scrolledtext as st, messagebox
 from tkinter import ttk
 
-
-from ..modules.encrypt.EncryptManager import EncryptManager
 from ..modules.database.MySQLEngine import MySQLEngine
 from ..modules.draw.DrawingManager import DrawingManager
 
 engine = MySQLEngine()
-em = EncryptManager()
 dm = DrawingManager()
 
 class LoadDrawWindow(tk.Frame):
@@ -55,9 +52,10 @@ class LoadDrawWindow(tk.Frame):
         """
         def loadDraw():
             res = engine.call('sp_getOneDrawing', values = [int(self.drawSelected)])
+            engine.call('sp_visualizeDraw', values = [self.userID ,int(self.drawSelected)])
             for value in res:
                 content = value.fetchone()
-                new_id['id'], new_id['name'], new_id['content'] = content[0], content[1], em.decryptDraw(content[2])
+                new_id['id'], new_id['name'], new_id['content'] = content
             self.master.destroy()
 
         openButton = tk.Button(self.master, text="Load", command=loadDraw)

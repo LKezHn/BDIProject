@@ -1,12 +1,10 @@
 import tkinter as tk, re
 from tkinter import scrolledtext as st, messagebox
 from tkinter import ttk
-from ..modules.encrypt.EncryptManager import EncryptManager
 from ..modules.admin.AdminActionsManager import AdminActionsManager
 from ..modules.auth.AuthManager import AuthManager
 
 aam = AdminActionsManager()
-em = EncryptManager()
 am = AuthManager()
 
 class AdminWindow(tk.Frame):
@@ -63,7 +61,7 @@ class AdminWindow(tk.Frame):
         users = aam.getUsers()
         for user in users:
             if user[2] != "admin":
-                self.treeview.insert("", "end", text=user[0], value=(user[1], em.decrypt(user[2]), user[3], user[4]))
+                self.treeview.insert("", "end", text=user[0], value=(user[1], user[2], user[3], user[4]))
             else:
                 self.treeview.insert("", "end", text=user[0], value=(user[1], user[2], user[3], user[4]))  
 
@@ -215,7 +213,7 @@ class AdminWindow(tk.Frame):
         users = aam.getUsers()
         for user in users:
             if user[2] != "admin":
-                self.treeview.insert("", "end", text=user[0], value=(user[1], em.decrypt(user[2]), user[3], user[4]))
+                self.treeview.insert("", "end", text=user[0], value=(user[1], user[2], user[3], user[4]))
             else:
                 self.treeview.insert("", "end", text=user[0], value=(user[1], user[2], user[3], user[4]))     
         
