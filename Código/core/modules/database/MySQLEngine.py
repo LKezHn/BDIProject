@@ -5,18 +5,25 @@ from configparser import ConfigParser
 
 class MySQLEngine:
     
-    def __init__(self):
-        self.getConfig()
+    def __init__(self, database = 1):
+        self.getConfig(database)
         
 
-    def getConfig(self):
+    def getConfig(self, database):
         config = ConfigParser()
         config.read('%s/config.ini' % os.path.dirname(os.path.abspath(__file__)))
-        self.server = config['DATABASE']['server']
-        self.port = config['DATABASE']['port']
-        self.user = config['DATABASE']['user']
-        self.password = config['DATABASE']['password']
-        self.database = config['DATABASE']['database']
+        if database == 1:
+            self.server = config['DATABASE']['server']
+            self.port = config['DATABASE']['port']
+            self.user = config['DATABASE']['user']
+            self.password = config['DATABASE']['password']
+            self.database = config['DATABASE']['database']
+        elif database == 2:
+            self.server = config['BACKUP']['server']
+            self.port = config['BACKUP']['port']
+            self.user = config['BACKUP']['user']
+            self.password = config['BACKUP']['password']
+            self.database = config['BACKUP']['database']
 
     def start(self):
         self.con = mysql.connector.connect(
