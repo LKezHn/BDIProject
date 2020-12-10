@@ -36,6 +36,12 @@ DELIMITER $$
         INSERT INTO Binnacle(id_user, num_draw, str_command) VALUES( @authID, new.id, "drawingModified");
     END$$
     
+    DROP TRIGGER IF EXISTS tr_deletedDraw$$
+    CREATE TRIGGER tr_deletedDraw AFTER DELETE ON Drawing FOR EACH ROW
+    BEGIN
+        INSERT INTO Binnacle(id_user, num_draw, str_command) VALUES( 1, old.id, "drawingDeleted");
+    END$$
+    
     DROP TRIGGER IF EXISTS tr_updatedConfig$$
     CREATE TRIGGER tr_updatedConfig AFTER UPDATE ON DrawingConfig FOR EACH ROW
     BEGIN
