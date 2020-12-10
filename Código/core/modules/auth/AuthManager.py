@@ -55,6 +55,7 @@ class AuthManager:
                 return user.fetchone()
         return False           
 
+    #Metodo que obtiene la informacion de un usuario
     def getUserInfo(self, identifier):
         response = engine.call("sp_getUser", values = [identifier])
         for value in response:

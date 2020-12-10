@@ -1,6 +1,11 @@
 from .DrawManager import *
 import json
 
+"""
+Clase encargada de los comandos
+@authors eglopezl@unah.hn lemartinezm@unah.hn
+@source Data Structures and Algorithms with Python 2nd, 2015, Kent D. Lee, Steve Hubbard
+"""
 class PyList:
 	def __init__(self):
 		self.gcList = []

@@ -2,6 +2,11 @@
 
 from ..modules.auth.AuthManager import AuthManager
 
+"""
+Clase de usuarios
+@authors eglopezl@unah.hn lemartinezm@unah.hn
+@version 1.0.0
+"""
 class User:
     def __init__(self):
         pass

@@ -1,5 +1,11 @@
 import turtle, json
 
+
+"""
+Clase encargada de los controles de los dibujos
+@authors eglopezl@unah.hn lemartinezm@unah.hn
+@source Data Structures and Algorithms with Python 2nd, 2015, Kent D. Lee, Steve Hubbard
+"""
 class GoToCommand:
     def __init__(self,x,y,width=1,color="black"):
         self.x = x

@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
 
+"""
+Clase de los dibujos
+@authors eglopezl@unah.hn lemartinezm@unah.hn
+@version 1.0.0
+"""
 class Draw:
     def __init__(self):
         self.content = {}
