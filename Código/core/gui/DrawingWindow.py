@@ -15,6 +15,12 @@ from .PyList import PyList
         
 am = AuthManager()
 
+"""
+Clase encargada de la ventana de dibujos
+@authors eglopezl@unah.hn lemartinezm@unah.hn
+@source Data Structures and Algorithms with Python 2nd, 2015, Kent D. Lee, Steve Hubbard
+"""
+
 class DrawingWindow(tkinter.Frame):
     def __init__(self, master=None):
         super().__init__(master)
@@ -44,6 +50,11 @@ class DrawingWindow(tkinter.Frame):
         bar = tkinter.Menu(self.master)
         fileMenu = tkinter.Menu(bar,tearoff=0)
 
+        """
+        Metodo que llama a la venta de las opciones del administrador
+        @author eglopezl@unah.hm
+        @version 1.0.0
+        """
         def buildAdminWindow():
             self.newWindow = tkinter.Toplevel(self.master)
             AdminWindow(self.newWindow,self.master)

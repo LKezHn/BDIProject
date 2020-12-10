@@ -3,12 +3,16 @@
 import mysql.connector, os
 from configparser import ConfigParser
 
+""" Clase de que se conecta con la Base de datos y es el motor mysql
+@authors lemartinezm@unah.hn eglopezl@unah.hn
+@version 1.0.0
+"""
 class MySQLEngine:
     
     def __init__(self, database = 1):
         self.getConfig(database)
         
-
+    #Metodo donde esta la configuracion de la conexion a la Base de Datos
     def getConfig(self, database):
         config = ConfigParser()
         config.read('%s/config.ini' % os.path.dirname(os.path.abspath(__file__)))
@@ -34,8 +38,6 @@ class MySQLEngine:
             database = self.database
         )
 
-        #print("Version de texto del objeto de conexion a MYSQL: %s" %self.con)
-
         #Enlace
         self.link = self.con.cursor()
 
@@ -50,12 +52,19 @@ class MySQLEngine:
     """
         Método encargado de insersión de datos en la Base de Datos
         @param query Es la query a ejecutar
+        @author lemartinezm@unah.hn
         @version 1.0.0
     """
     def insert(self, query):
         self.link.execute(query)
         self.con.commit()
 
+    """
+        Método encargado de eliminacion de datos en la Base de Datos
+        @param query Es la query a ejecutar
+        @author eglopezl@unah.hn
+        @version 1.0.0
+    """
     def delete(self,query):
         self.link.execute(query)
         self.con.commit()    

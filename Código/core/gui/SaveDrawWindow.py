@@ -13,6 +13,11 @@ backupEngine = MySQLEngine(2)
 dm = DrawingManager()
 cm = CompressManager()
 
+"""
+Clase para la ventana emergente de guardar un dibujo
+@authors eglopezl@unah.hn lemartinezm@unah.hn
+@version 1.0.0
+"""
 class SaveDrawWindow(tk.Frame):
     def __init__(self,master, parent, user_id, user_role, drawing, draw_name = "", draw_id = 0):
         super().__init__(master)

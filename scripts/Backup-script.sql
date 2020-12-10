@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS User (
 -- -----------------------------------------------------
 -- Tabla Drawing
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS Drawing ;
+DROP TABLE IF EXISTS Drawing;
 
 CREATE TABLE IF NOT EXISTS Drawing (
   id INT NOT NULL,
