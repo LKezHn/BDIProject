@@ -43,8 +43,7 @@ CREATE TABLE IF NOT EXISTS Binnacle (
   bit_config BIT DEFAULT 0 COMMENT "Config of drawing are updated or not",
   dat_date DATETIME NOT NULL DEFAULT NOW() COMMENT "Date of the event",
   str_command TEXT NOT NULL COMMENT "Command used",
-  PRIMARY KEY (id),
-  FOREIGN KEY (id_user) REFERENCES User(id)
+  PRIMARY KEY (id)
 ) COMMENT "Binnacle table ";
 
 CREATE TABLE IF NOT EXISTS DrawingConfig(
@@ -86,7 +85,7 @@ CREATE TABLE IF NOT EXISTS Drawing (
   str_name VARCHAR(45) NOT NULL COMMENT "Name of the drawing",
   blo_drawingData BLOB NOT NULL COMMENT "Drawing content",
   PRIMARY KEY (id),
-  FOREIGN KEY (id_user) REFERENCES User(id)
+  FOREIGN KEY (id_user) REFERENCES User(id) ON DELETE CASCADE
 ) COMMENT "Table of drawings";
 
 CREATE TABLE IF NOT EXISTS DrawingConfig(
