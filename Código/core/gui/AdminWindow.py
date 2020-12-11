@@ -7,6 +7,12 @@ from ..modules.auth.AuthManager import AuthManager
 aam = AdminActionsManager()
 am = AuthManager()
 
+"""
+Clase encargada de la ventana que contiene las opciones para el administrador.
+@authors lemartinezm@unah.hn eglopezl@unah.hn
+@version 1.0.0
+@date 10/11/2020
+"""
 class AdminWindow(tk.Frame):
 
     def __init__(self,master,parent):
@@ -17,8 +23,8 @@ class AdminWindow(tk.Frame):
 
     """
     Metodo encargado de la validacion utlizando expreiones regulares de los campos en los Adminoptions.
-    @param valor del de lo ingresado en el input.
-    @param tipo de campo del input.
+    @param field Valor del de lo ingresado en el input.
+    @param typeOfField Tipo de campo del input.
     @author lemartinezm@unah.hn
     """   
     def isValidField(self, field, typeOfField):
