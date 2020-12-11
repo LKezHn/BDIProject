@@ -2,7 +2,103 @@
 III PAC 2020 IS - 501 Base de Datos I 1100 @date 2020/12/12
 @author lemartinezm@unah.hn eglopezl@unah.hn
 ```
-# Proyecto Final
+# Proyecto Final Bases de Datos I
+* Documentacion del proyecto final de bases de datso I.
+
+## Herramientas utilizadas
+* Python3
+* MariaDB
+* Mysql
+* Tkinter
+
+## Forma de Trabajo
+* Identificamos que el proyecto constaba de partes fundamentales las cuales definieron la forma en la que se trabajaria las cuales son:
+
+    * **Desarrollo en python**
+    * **Desarrollo de las bases de datos** 
+
+    se acordo que ambos integrantes del proyecto tabajarian en ambas partes a la vez que se avanzara en el.
+
+    **Planificado:**
+
+        * Inicialmente para la elaboracion del proyecto se contaba con mas integrantes.
+        * Se dividiría en parejas para realizar las 2 partes fundamentales encontras.
+        * La pareja que se encargaria del desarrollo en python se dividirian el trabajo que tambien constaba de 2 partes que son:
+            * Desarrllo de la parte grafica del proyecto, junto a ventanas emergentes, ventanas de errores y botones.
+            * Desarrollo de la funcionalidas que acompañan la parte grafica y la conexión con la base de datos.
+        * Igualmente la otra pareja se encargaría del desarrollo de las bases de datos las cuales son 2 asi que se divian en 2 partes.
+            * Desarrolo de la Base de Datos principal.
+            * Desarrollo de la Base de Datos de Respaldo.
+
+    **No Planificado**
+
+        * No se contaba con todos los hechos que habrían de ocurrir en el III periodo academico de la UNAH en el 2020.
+        * Incluidos los siguientes hechos:
+            * Crisis sanitaria a nivel mundial por el Covid-19
+            * Paso de 2 huracanes devastadores para nuestro país.
+        * Abandono de la clase de compañeros de trabajo por los eventos antes mencionados.
+        * Cambio en lo inicialmente planificado.
+
+## Desarrollo en python
+* Tener instaladas y descargadas la herramientas identificadas necesarias para la realización del proyecto.
+* Creación de la intefaz grafica de dibujo en tkinter. Codigo obtenido en el libro: **Data Structures and Algorithms with Python 2nd, 2015, Kent D. Lee, Steve Hubbard**
+* Del codigo obtenido se procedio a fragmentarlos en modulos diferentes y separandolos por clases.
+* Creación del main.py
+* Creación del directorio core
+* Dentro del core se encuentras las siguientes carpetas.
+    * **entities:** Contiene los archivos con sus clases de las entidades identificadas.
+        * **Draw:** Clase de la entidad de dibujo.
+        * **User:** Clase que contiene la entidad Usuario.
+    * **gui:** Contiene archivos de la creación de las ventanas graficas con pyhton3 tkinter.
+        * **AdminWindow.py:** Archivo encargada de la ventana grafica que contiene las opciones para el administrador.
+        * **AuthWindow.py:** Archivo encargado del login de la applicación.
+        * **DrawingWindow.py:** Archivo encargado que muestra el area para crear dibujos.
+        * **DrawManager.py:** Archivo que se encarga de algunas configuraciones de los dibujos.
+        * **LoadDrawWindow.py:** Archivo encargado de la ventana grafica para seleccionar un dibujo a cargar.
+        * **Pylist.py:** Archivo encargado de los comandos para la ventana de dibujo.
+        * **SaveDrawWindow.py:** Archivo de la ventana grafica que guarda un dibujo.
+    * **modules:** Contiene los directorios de los modulos necesarios para la correcta funcionalidad del proyecto.
+        * **admin:** Donde estan desarrolladas las funcionalidades del administrador.
+        * **auth:** Autenticación de usuarios.
+        * **compress:** Compresion de los datos.
+        * **database:** Conexion con las bases de datos.
+        * **draw:** Conexion de los dibujos con el motor mysql.
+* Previsualización de la estructura del directorio desarollado en python.
+
+    * main.py
+    * core
+        * entities
+            * Draw.py
+            * User.py
+        * gui
+            * AdminWindow.py
+            * AuthWindow.py
+            * DrawingWindow.py
+            * DrawManager.py
+            * LoadDrawWindow.py
+            * Pylist.py
+            * SaveDrawWindow.py
+        * modules
+            * admin
+                * AdminActionsManager.py
+            * auth
+                * AuthManager.py
+            * compress
+                 *CompressManager.py
+            * database
+                * config.ini
+                * MySQLEngine.py
+            * draw
+                * DrawingManager.py
+
+
 
 ## Diseño de las Bases de Datos
------------------
+
+* Identificamos las entidades que tendran las bases de datos
+* Identificamos los campos de las entidades.
+* Identificamos los tipos de datos que deberian llevar los campos.
+* Creacion de los digramas ER Entidad relación.
+
+Diseño del diagrama Entidad Realción de la BAse de Datos principal:
+![Diagrama Entidad Realacion I](https://github.com/LKezHn/BDIProject/blob/main/Documentaci%C3%B3n%20%20de%20An%C3%A1lisis/img/ERDiagram_DataBaseA.jpg) 
