@@ -101,4 +101,23 @@ III PAC 2020 IS - 501 Base de Datos I 1100 @date 2020/12/12
 * Creacion de los digramas ER Entidad relación.
 
 Diseño del diagrama Entidad Realción de la BAse de Datos principal:
-![Diagrama Entidad Realacion I](https://github.com/LKezHn/BDIProject/blob/main/Documentaci%C3%B3n%20%20de%20An%C3%A1lisis/img/ERDiagram_DataBaseA.jpg) 
+![Diagrama Entidad Realacion I](https://github.com/Eglopez/BDIProject/blob/main/Documentaci%C3%B3n%20%20de%20An%C3%A1lisis/img/ERDiagram_DataBaseA.jpg)
+
+* Creacion del diagrama de tablas de la base principal.
+* Creacion del diagrama ER de la base de datos de resplado.
+
+Diseño del diagrama Entidad Relacion de la base  de datos de respaldo.
+![Diagrama Entidad Realacion II](https://github.com/Eglopez/BDIProject/blob/main/Documentaci%C3%B3n%20%20de%20An%C3%A1lisis/img/Backup%20DB.jpg)
+
+* Creación de las tablas para el diagrama de la base de respaldo.
+* Creación del directorio con los scripts mysql
+* **0_tables.sql:** Contiene el codigo sql de las tablas de las 2 bases de datos
+* **1_procedures.sql:** Procedures de las bases de datos.
+* **2_triggers.sql:** Triggers de las bases de datos.
+* Estructura del directorio de los scripts.
+    * scripts
+        * 0_tables.sql
+        * 1_procedures.sql
+        * 2_triggers.sql
+
+* Mas informacion de las bases de datos: "LINK PDF"
