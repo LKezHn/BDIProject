@@ -7,8 +7,8 @@ III PAC 2020 IS - 501 Base de Datos I 1100 @date 2020/12/12 @author lemartinezm@
 ## Herramientas utilizadas
 * Python 3
 * MariaDB 10.3 o
-* Mysql 5.7
-* Tkinter
+* MySQL 5.7
+* TKinter
 
 --------------------------------
 ## Forma de Trabajo
