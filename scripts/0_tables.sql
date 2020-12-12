@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS User (
   str_userName VARCHAR(40) NOT NULL UNIQUE COMMENT "Username",
   str_password TEXT NOT NULL COMMENT "Password of the user",
   PRIMARY KEY (id), 
-  FOREIGN KEY (id_role) REFERENCES Roles(id)
+  FOREIGN KEY (id_role) REFERENCES Roles(id) ON DELETE CASCADE
 ) COMMENT "Table of users";
 
 CREATE TABLE IF NOT EXISTS Drawing (
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS Drawing (
   str_name VARCHAR(45) NOT NULL COMMENT "Name of the drawing",
   jso_drawingData JSON NOT NULL COMMENT "Drawing content",
   PRIMARY KEY (id),
-  FOREIGN KEY (id_user) REFERENCES User(id)
+  FOREIGN KEY (id_user) REFERENCES User(id)  ON DELETE CASCADE
 ) COMMENT "Table of drawings";
 
 CREATE TABLE IF NOT EXISTS Binnacle (
@@ -85,7 +85,7 @@ CREATE TABLE IF NOT EXISTS Drawing (
   str_name VARCHAR(45) NOT NULL COMMENT "Name of the drawing",
   blo_drawingData BLOB NOT NULL COMMENT "Drawing content",
   PRIMARY KEY (id),
-  FOREIGN KEY (id_user) REFERENCES User(id) ON DELETE CASCADE
+  FOREIGN KEY (id_user) REFERENCES User(id)
 ) COMMENT "Table of drawings";
 
 CREATE TABLE IF NOT EXISTS DrawingConfig(
